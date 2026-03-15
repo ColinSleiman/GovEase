@@ -29,6 +29,6 @@ class Status extends Model
 
     public function requests(): HasMany
     {
-        return $this->hasMany(ServiceRequest::class, 'status_id');
+        return $this->hasMany(Request::class, 'status_id');
     }
 }

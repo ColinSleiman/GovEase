@@ -19,7 +19,7 @@ class DocumentRequest extends Model
 
     public function request(): BelongsTo
     {
-        return $this->belongsTo(ServiceRequest::class, 'request_id');
+        return $this->belongsTo(Request::class, 'request_id');
     }
 
     public function document(): BelongsTo

@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function requests(): HasMany
     {
-        return $this->hasMany(ServiceRequest::class, 'user_id');
+        return $this->hasMany(Request::class, 'user_id');
     }
 
     public function uploadedDocuments(): HasMany

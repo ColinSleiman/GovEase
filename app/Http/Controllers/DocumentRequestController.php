@@ -3,53 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Models\DocumentRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class DocumentRequestController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            DocumentRequest::query()
-                ->with(['request.status', 'document'])
-                ->latest('id')
-                ->get()
-        );
+        try {
+            $data = DocumentRequest::with(['request.status', 'document'])->get();
+
+            return response()->json($data, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function store(HttpRequest $request): JsonResponse
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $request)
     {
         $validated = $this->validatedData($request);
 
         $documentRequest = DocumentRequest::create($validated)->load(['request.status', 'document']);
 
-        return response()->json($documentRequest, 201);
+        return response()->json($documentRequest, Response::HTTP_CREATED);
     }
 
-    public function show(DocumentRequest $documentRequest): JsonResponse
+    public function show(DocumentRequest $documentRequest)
     {
-        return response()->json($documentRequest->load(['request.status', 'document']));
+        return response()->json($documentRequest->load(['request.status', 'document']), Response::HTTP_OK);
     }
 
-    public function update(HttpRequest $request, DocumentRequest $documentRequest): JsonResponse
+    public function edit(DocumentRequest $documentRequest)
+    {
+        //
+    }
+
+    public function update(Request $request, DocumentRequest $documentRequest)
     {
         $validated = $this->validatedData($request, $documentRequest);
 
         $documentRequest->update($validated);
 
-        return response()->json($documentRequest->load(['request.status', 'document']));
+        return response()->json($documentRequest->load(['request.status', 'document']), Response::HTTP_OK);
     }
 
-    public function destroy(DocumentRequest $documentRequest): JsonResponse
+    public function destroy(DocumentRequest $documentRequest)
     {
         $documentRequest->delete();
 
-        return response()->json(status: 204);
+        return response()->json(['message' => 'Document request deleted successfully'], Response::HTTP_NO_CONTENT);
     }
 
-    private function validatedData(HttpRequest $request, ?DocumentRequest $documentRequest = null): array
+    private function validatedData(Request $request, ?DocumentRequest $documentRequest = null): array
     {
         return $request->validate([
             'request_id' => [

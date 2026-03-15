@@ -3,52 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DocumentController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            Document::query()
-                ->with(['uploadedBy', 'createdBy', 'documentRequests'])
-                ->latest('id')
-                ->get()
-        );
+        try {
+            $data = Document::with(['uploadedBy', 'createdBy', 'documentRequests'])->get();
+
+            return response()->json($data, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function store(HttpRequest $request): JsonResponse
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $request)
     {
         $validated = $this->validatedData($request);
 
         $document = Document::create($validated)->load(['uploadedBy', 'createdBy', 'documentRequests']);
 
-        return response()->json($document, 201);
+        return response()->json($document, Response::HTTP_CREATED);
     }
 
-    public function show(Document $document): JsonResponse
+    public function show(Document $document)
     {
-        return response()->json($document->load(['uploadedBy', 'createdBy', 'documentRequests']));
+        return response()->json($document->load(['uploadedBy', 'createdBy', 'documentRequests']), Response::HTTP_OK);
     }
 
-    public function update(HttpRequest $request, Document $document): JsonResponse
+    public function edit(Document $document)
+    {
+        //
+    }
+
+    public function update(Request $request, Document $document)
     {
         $validated = $this->validatedData($request);
 
         $document->update($validated);
 
-        return response()->json($document->load(['uploadedBy', 'createdBy', 'documentRequests']));
+        return response()->json($document->load(['uploadedBy', 'createdBy', 'documentRequests']), Response::HTTP_OK);
     }
 
-    public function destroy(Document $document): JsonResponse
+    public function destroy(Document $document)
     {
         $document->delete();
 
-        return response()->json(status: 204);
+        return response()->json(['message' => 'Document deleted successfully'], Response::HTTP_NO_CONTENT);
     }
 
-    private function validatedData(HttpRequest $request): array
+    private function validatedData(Request $request): array
     {
         return $request->validate([
             'file_path' => ['required', 'string', 'max:2048'],

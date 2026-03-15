@@ -3,50 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            Payment::query()->with('request')->latest('id')->get()
-        );
+        try {
+            $data = Payment::with('request')->get();
+
+            return response()->json($data, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function store(HttpRequest $request): JsonResponse
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $request)
     {
         $validated = $this->validatedData($request);
 
         $payment = Payment::create($validated)->load('request');
 
-        return response()->json($payment, 201);
+        return response()->json($payment, Response::HTTP_CREATED);
     }
 
-    public function show(Payment $payment): JsonResponse
+    public function show(Payment $payment)
     {
-        return response()->json($payment->load('request'));
+        return response()->json($payment->load('request'), Response::HTTP_OK);
     }
 
-    public function update(HttpRequest $request, Payment $payment): JsonResponse
+    public function edit(Payment $payment)
+    {
+        //
+    }
+
+    public function update(Request $request, Payment $payment)
     {
         $validated = $this->validatedData($request, $payment);
 
         $payment->update($validated);
 
-        return response()->json($payment->load('request'));
+        return response()->json($payment->load('request'), Response::HTTP_OK);
     }
 
-    public function destroy(Payment $payment): JsonResponse
+    public function destroy(Payment $payment)
     {
         $payment->delete();
 
-        return response()->json(status: 204);
+        return response()->json(['message' => 'Payment deleted successfully'], Response::HTTP_NO_CONTENT);
     }
 
-    private function validatedData(HttpRequest $request, ?Payment $payment = null): array
+    private function validatedData(Request $request, ?Payment $payment = null): array
     {
         return $request->validate([
             'amount' => ['required', 'numeric', 'min:0'],
