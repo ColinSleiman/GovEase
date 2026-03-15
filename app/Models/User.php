@@ -18,9 +18,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'email_verified_at',
+        'two_factor_authentication',
         'password',
+        'office_id',
+        'role_id',
     ];
 
     /**
@@ -33,6 +38,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     /**
      * Get the attributes that should be cast.
      *
@@ -43,6 +49,27 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'two_factor_authentication' => 'boolean',
         ];
+    }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+    
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 }
