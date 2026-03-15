@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('rating');
             $table->string('comment');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            /**$table->foreignId('office_id')->constrained('offices')->onDelete('cascade'); */
+            $table->foreignId('office_id')->constrained('offices')->onDelete('cascade'); 
         });
     }
 
