@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,20 +52,6 @@ class User extends Authenticatable
             'two_factor_authentication' => 'boolean',
         ];
     }
-
-    public function requests(): HasMany
-    {
-        return $this->hasMany(ServiceRequest::class, 'user_id');
-    }
-
-    public function uploadedDocuments(): HasMany
-    {
-        return $this->hasMany(Document::class, 'uploaded_by');
-    }
-
-    public function createdDocuments(): HasMany
-    {
-        return $this->hasMany(Document::class, 'created_by');
 
     public function office()
     {
