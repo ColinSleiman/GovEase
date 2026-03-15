@@ -5,6 +5,8 @@ use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\Auth\Register;
+
 
 
 Route::get('/', function () {
@@ -12,15 +14,16 @@ Route::get('/', function () {
 });
 
 
-Route::post('/register', [App\Http\Controllers\Auth\Register::class, '__invoke'])
+Route::post('/register', [Register::class, '__invoke'])
         ->middleware('guest');
 
-Route::post('/login', [App\Http\Controllers\Auth\Login::class, '__invoke'])
+Route::post('/login', [Register::class, '__invoke'])
         ->middleware('guest');
-        
-Route::post('/logout', [App\Http\Controllers\Auth\Logout::class, '__invoke'])
+
+Route::post('/logout', [Register::class, '__invoke'])
         ->middleware('auth')
         ->name('logout');
+
 Route::resource('municipalities', MunicipalityController::class);
 Route::resource('offices', OfficeController::class);
 Route::resource('service-categories', ServiceCategoryController::class);
