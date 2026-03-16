@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentRequestController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\OfficeController;
@@ -28,6 +33,12 @@ Route::resource('municipalities', MunicipalityController::class);
 Route::resource('offices', OfficeController::class);
 Route::resource('service-categories', ServiceCategoryController::class);
 Route::resource('services', ServiceController::class);
+
+Route::Resource('statuses', StatusController::class);
+Route::Resource('requests', RequestController::class);
+Route::Resource('documents', DocumentController::class);
+Route::Resource('document-requests', DocumentRequestController::class);
+Route::Resource('payments', PaymentController::class);
 
 // Note: Any custom method you create will not be automatically called by resource (only CRUD methods).
 // To use it, you must define a separate route.

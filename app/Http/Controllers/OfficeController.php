@@ -44,9 +44,7 @@ class OfficeController extends Controller
     // Display a specific office
     public function show(Office $office)
     {
-        $data = Office::find($office);
-
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json($office, Response::HTTP_OK);
     }
 
     // Show the form for editing an office
