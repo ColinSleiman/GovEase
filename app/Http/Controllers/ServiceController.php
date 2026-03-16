@@ -42,9 +42,7 @@ class ServiceController extends Controller
     // Display the specified resource.
     public function show(Service $service)
     {
-        $data = Service::find($service);
-
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json($service, Response::HTTP_OK);
     }
 
     // Show the form for editing the specified resource.

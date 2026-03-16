@@ -43,9 +43,7 @@ class MunicipalityController extends Controller
     // Display a specific municipality
     public function show(Municipality $municipality)
     {
-        $data = Municipality::find($municipality);
-
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json($municipality, Response::HTTP_OK);
     }
 
     // Show the form for editing a municipality

@@ -37,9 +37,7 @@ class ServiceCategoryController extends Controller
     // Display a specific service category
     public function show(ServiceCategory $serviceCategory)
     {
-        $data = ServiceCategory::find($serviceCategory);
-
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json($serviceCategory, Response::HTTP_OK);
     }
 
     // Show the form for editing a service category
