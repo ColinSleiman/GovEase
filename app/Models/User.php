@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -17,6 +18,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
     protected $fillable = [
         'first_name',
         'last_name',
@@ -44,6 +46,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
     protected function casts(): array
     {
         return [
@@ -53,18 +56,11 @@ class User extends Authenticatable
         ];
     }
 
-    public function office()
-    {
-        return $this->belongsTo(Office::class);
-    }
-    
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
+    public function office() { return $this->belongsTo(Office::class); }
 
-    public function sentMessages()
-    {
+    public function role() { return $this->belongsTo(Role::class); }
+
+    public function sentMessages() {
         return $this->hasMany(Message::class, 'sender_id');
     }
 
@@ -72,4 +68,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    public function requests() { return $this->belongsToMany(Request::class, 'user_requests', 'user_id', 'request_id'); }
+
+    public function documents() { return $this->hasMany(Document::class, 'uploaded_by'); }
+
+    public function appointments() { return $this->hasMany(Appointment::class, 'user_id'); }
+
+    public function reviews() { return $this->hasMany(Review::class, 'user_id'); }
 }

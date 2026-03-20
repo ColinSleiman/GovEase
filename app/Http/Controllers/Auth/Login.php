@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Login extends Controller
 {
@@ -21,7 +21,7 @@ class Login extends Controller
         if (Auth::attempt($credentials)) {
 
             $request->session()->regenerate();
-            return redirect()->route('/')->with('success','Logged In');
+            return redirect('/')->with('success', 'Logged In');
         }
 
         return back()

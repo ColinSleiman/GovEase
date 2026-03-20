@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
 {
-    //
 
     protected $fillable = [
         'file_path',
@@ -21,6 +20,6 @@ class Document extends Model
 
     public function uploadedBy()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'uploaded_by');
     }
 }

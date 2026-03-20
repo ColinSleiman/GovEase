@@ -26,7 +26,7 @@ class ServiceCategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
+            'name' => 'required|string',
         ]);
 
         $category = ServiceCategory::create($validated);
@@ -50,7 +50,7 @@ class ServiceCategoryController extends Controller
     public function update(Request $request, ServiceCategory $serviceCategory)
     {
         $validated = $request->validate([
-            'name',
+            'name' => 'sometimes|required|string',
         ]);
 
         $serviceCategory->update($validated);

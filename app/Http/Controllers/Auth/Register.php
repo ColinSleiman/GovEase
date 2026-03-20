@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Auth;
-use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class Register extends Controller
 {
@@ -16,19 +16,25 @@ class Register extends Controller
     public function __invoke(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'office_id' => 'required|exists:offices,id',
+            'role_id' => 'required|exists:roles,id',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
             'email' => $validated['email'],
+            'office_id' => $validated['office_id'],
+            'role_id' => $validated['role_id'],
             'password' => Hash::make($validated['password']),
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('/')->with('success','Logged In');
+        return redirect('/')->with('success', 'Logged In');
     }
 }
