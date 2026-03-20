@@ -38,12 +38,12 @@ Route::resource('service-categories', ServiceCategoryController::class);
 Route::resource('services', ServiceController::class);
 Route::resource('appointments', AppointmentController::class);
 
-Route::Resource('statuses', StatusController::class);
-Route::Resource('requests', RequestController::class);
-Route::Resource('documents', DocumentController::class);
-Route::Resource('payments', PaymentController::class);
-Route::Resource('review', ReviewController::class);
+Route::resource('statuses', StatusController::class);
+Route::resource('requests', RequestController::class);
+Route::resource('documents', DocumentController::class);
+Route::resource('payments', PaymentController::class);
+Route::resource('review', ReviewController::class);
 
 // pivot tables
-Route::Resource('document-requests', DocumentRequestController::class);
-Route::Resource('user-requests', UserRequestController::class);
+Route::resource('document-requests', DocumentRequestController::class);
+Route::resource('user-requests', UserRequestController::class);

@@ -56,7 +56,7 @@ class RequestController extends Controller
     }
 
     // Update a request
-    public function update(Request $requestData, Request $request)
+    public function update(Request $requestData, \App\Models\Request $request)
     {
         $validated = $requestData->validate([
             'qr_code',

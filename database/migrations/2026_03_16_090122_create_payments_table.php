@@ -16,7 +16,6 @@ return new class extends Migration
 
             $table->double('amount');
             $table->string('payment_method');
-            $table->string('status');
             $table->string('transaction_reference');
 
             // fk

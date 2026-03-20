@@ -10,9 +10,10 @@ class Request extends Model
     protected $fillable = [
         'qr_code',
         'tracking_number',
+        'status_id',
         'service_id',
         'appointment_id',
-        'status_id'
+        'payment_id'
     ];
 
     public function status() { return $this->belongsTo(Status::class); }
