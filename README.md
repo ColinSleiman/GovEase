@@ -1,59 +1,170 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GovEase – E-Services Management Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
 
-## About Laravel
+**GovEase** is a web-based platform designed to digitize and streamline public services provided by municipalities and government offices. It centralizes service management into a single system where citizens, office staff, and administrators can efficiently interact, manage requests, and track operations.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The platform improves transparency, reduces manual processes, and enhances citizen experience through automation and real-time interaction.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Problem Statement
 
-## Learning Laravel
+Traditional government service workflows are often:
+- Time-consuming  
+- Paper-based  
+- Difficult to track  
+- Lacking transparency  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+GovEase addresses these issues by providing a fully digital service lifecycle.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Objectives
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Digitize public service workflows  
+- Centralize service and request management  
+- Enable secure role-based access  
+- Improve communication between users and offices  
+- Provide real-time tracking and notifications  
+- Support online and cryptocurrency payments  
+- Enhance reporting and analytics  
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Key Features
 
-## Contributing
+### User (Citizen)
+- Browse services by office and category  
+- Submit service requests with documents  
+- Track request status in real time  
+- Book appointments  
+- Make online payments (card & crypto)  
+- Receive notifications (email/SMS)  
+- Rate and review services  
+- View request and payment history  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+### Government Office (Municipality User)
+- Manage services and categories  
+- Handle incoming requests  
+- Update request statuses  
+- Schedule and manage appointments  
+- Communicate with users via messaging  
+- Generate documents (certificates, receipts)  
+- View and respond to feedback  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### Admin
+- Manage municipalities and offices  
+- Manage users and roles  
+- Monitor system activity  
+- Generate reports (requests, revenue)  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Tech Stack
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Backend:** Laravel  
+- **Database:** MySQL  
+- **Frontend:** Bootstrap (or similar)  
+- **APIs:**
+  - Google Maps API  
+  - Payment APIs (card & cryptocurrency)  
+  - Social login APIs  
+
+---
+
+## System Architecture
+
+The system follows a modular and scalable architecture using Laravel MVC and Eloquent ORM.
+
+---
+
+## Entity Relationships
+
+### Core Structure
+- Municipality → has many Offices  
+- Office → belongs to Municipality  
+
+- Office → has many Services  
+- Service → belongs to Office and ServiceCategory  
+
+---
+
+### User & Access
+- Role → has many Users  
+- User → belongs to Role and Office  
+
+- User → has many Messages (sent & received)  
+- Message → belongs to sender and receiver (User)  
+
+---
+
+### Workflow
+- Appointment → belongs to User, Office, Service, Status  
+- Request → belongs to Status, Service, Appointment  
+
+- Status → has many Requests, Payments, Appointments  
+
+---
+
+### Payments
+- Payment → belongs to Request and Status  
+- Request → has one Payment  
+
+---
+
+### Many-to-Many Relationships
+
+#### User ↔ Request
+- Pivot table: `user_requests`
+
+#### Request ↔ Document
+- Pivot table: `document_requests`
+
+---
+
+### Document Management
+- Document → belongs to User (uploaded_by)  
+- User → has many Documents  
+
+---
+
+### Reviews
+- Review → belongs to User and Office  
+- User → has many Reviews  
+- Office → has many Reviews  
+
+---
+
+## Database Design (ERD Summary)
+
+- **One-to-Many**
+  - Municipality → Office  
+  - Office → Service  
+  - Role → User  
+  - Status → Request / Payment / Appointment  
+
+- **Many-to-Many**
+  - User ↔ Request  
+  - Request ↔ Document  
+
+- **One-to-One**
+  - Request → Payment  
+
+---
+
+## Security Features
+
+- Authentication (email/password & social login)  
+- Role-based access control  
+- Two-Factor Authentication (2FA)  
+- Secure payment handling  
+- Data validation  
+
+---
+
+## Project Structure
