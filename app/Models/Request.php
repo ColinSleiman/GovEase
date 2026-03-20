@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
-    //
 
     protected $fillable = [
         'qr_code',
@@ -16,30 +15,13 @@ class Request extends Model
         'status_id'
     ];
 
-    public function status()
-    {
-        return $this->belongsTo(Status::class);
-    }
+    public function status() { return $this->belongsTo(Status::class); }
 
-    public function service()
-    {
-        return $this->belongsTo(Service::class);
-    }
+    public function service() { return $this->belongsTo(Service::class); }
 
-    /*
-    public function appointment()
-    {
-        return $this->belongsTo(Appointment::class);
-    }
-    */
+    public function appointment() { return $this->belongsTo(Appointment::class); }
 
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
-    }
+    public function payment() { return $this->hasOne(Payment::class); }
 
-    public function documentRequests()
-    {
-        return $this->hasMany(DocumentRequest::class);
-    }
+    public function documentRequests() { return $this->hasMany(DocumentRequest::class); }
 }

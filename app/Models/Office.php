@@ -16,13 +16,9 @@ class Office extends Model
         'municipality_id'
     ];
 
-    public function municipality()
-    {
-        return $this->belongsTo(Municipality::class);
-    }
+    public function municipality() { return $this->belongsTo(Municipality::class); }
 
-    public function services()
-    {
-        return $this->hasMany(Service::class);
-    }
+    public function services() { return $this->hasMany(Service::class); }
+
+
 }

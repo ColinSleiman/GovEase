@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('document_requests', function (Blueprint $table) {
+        Schema::create('user_requests', function (Blueprint $table) {
 
             // fk
+            $table->foreignId("user_id")
+                ->references("id")
+                ->on("users")
+                ->onDelete("cascade");
+
             $table->foreignId("request_id")
                 ->references("id")
                 ->on("requests")
                 ->onDelete("cascade");
 
-            $table->foreignId("document_id")
-                ->references("id")
-                ->on("documents")
-                ->onDelete("cascade");
-
             $table->timestamps();
 
-            $table->primary(['request_id', 'document_id']);
+            $table->primary(['user_id', 'request_id']);
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('document_requests');
+        Schema::dropIfExists('user_requests');
     }
 };

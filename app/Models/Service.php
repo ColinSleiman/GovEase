@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+
     protected $fillable = [
         'name',
         'description',
@@ -15,13 +16,7 @@ class Service extends Model
         'service_category_id'
     ];
 
-    public function office()
-    {
-        return $this->belongsTo(Office::class);
-    }
+    public function office() { return $this->belongsTo(Office::class); }
 
-    public function serviceCategory()
-    {
-        return $this->belongsTo(ServiceCategory::class);
-    }
+    public function serviceCategory() { return $this->belongsTo(ServiceCategory::class); }
 }
