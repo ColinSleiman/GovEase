@@ -20,5 +20,11 @@ class Office extends Model
 
     public function services() { return $this->hasMany(Service::class); }
 
+    public function users() { return $this->hasMany(User::class, 'office_id'); }
+
+    public function appointments() { return $this->hasMany(Appointment::class, 'office_id'); }
+
+    public function reviews() { return $this->hasMany(Review::class, 'office_id'); }
+
 
 }

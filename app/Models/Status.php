@@ -11,5 +11,7 @@ class Status extends Model
 
     public function requests() { return $this->hasMany(Request::class); }
 
+    public function appointments() { return $this->hasMany(Appointment::class, 'status_id'); }
+
     public function payments() { return $this->hasMany(Payment::class); }
 }

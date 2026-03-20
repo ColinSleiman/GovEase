@@ -14,6 +14,7 @@ class Review extends Model
         'office_id'
     ];
 
-    public function user() { return $this->belongsTo('User'); }
-    public function office() { return $this->belongsTo('Office'); }
+    public function user() { return $this->belongsTo(User::class, 'user_id'); }
+
+    public function office() { return $this->belongsTo(Office::class, 'office_id'); }
 }

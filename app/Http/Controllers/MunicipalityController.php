@@ -31,8 +31,8 @@ class MunicipalityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
-            'region',
+            'name' => 'required|string',
+            'region' => 'required|string',
         ]);
 
         $municipality = Municipality::create($validated);
@@ -56,8 +56,8 @@ class MunicipalityController extends Controller
     public function update(Request $request, Municipality $municipality)
     {
         $validated = $request->validate([
-            'name',
-            'region',
+            'name' => 'sometimes|required|string',
+            'region' => 'sometimes|required|string',
         ]);
 
         $municipality->update($validated);

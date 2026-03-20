@@ -24,4 +24,6 @@ class Appointment extends Model
     public function office() { return $this->belongsTo(Office::class); }
 
     public function service() { return $this->belongsTo(Service::class); }
+
+    public function requests() { return $this->hasMany(Request::class, 'appointment_id'); }
 }

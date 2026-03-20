@@ -12,8 +12,7 @@ class Request extends Model
         'tracking_number',
         'status_id',
         'service_id',
-        'appointment_id',
-        'payment_id'
+        'appointment_id'
     ];
 
     public function status() { return $this->belongsTo(Status::class); }
@@ -22,7 +21,9 @@ class Request extends Model
 
     public function appointment() { return $this->belongsTo(Appointment::class); }
 
-    public function payment() { return $this->hasOne(Payment::class); }
+    public function payment() { return $this->hasOne(Payment::class, 'request_id'); }
 
     public function documentRequests() { return $this->hasMany(DocumentRequest::class); }
+
+    public function users() { return $this->belongsToMany(User::class, 'user_requests', 'request_id', 'user_id'); }
 }

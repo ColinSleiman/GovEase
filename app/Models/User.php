@@ -68,4 +68,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    public function requests() { return $this->belongsToMany(Request::class, 'user_requests', 'user_id', 'request_id'); }
+
+    public function documents() { return $this->hasMany(Document::class, 'uploaded_by'); }
+
+    public function appointments() { return $this->hasMany(Appointment::class, 'user_id'); }
+
+    public function reviews() { return $this->hasMany(Review::class, 'user_id'); }
 }
