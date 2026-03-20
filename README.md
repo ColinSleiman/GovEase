@@ -6,7 +6,6 @@
 
 The platform improves transparency, reduces manual processes, and enhances citizen experience through automation and real-time interaction.
 
----
 
 ## Problem Statement
 
@@ -18,7 +17,6 @@ Traditional government service workflows are often:
 
 GovEase addresses these issues by providing a fully digital service lifecycle.
 
----
 
 ## Objectives
 
@@ -30,7 +28,6 @@ GovEase addresses these issues by providing a fully digital service lifecycle.
 - Support online and cryptocurrency payments  
 - Enhance reporting and analytics  
 
----
 
 ## Key Features
 
@@ -44,7 +41,6 @@ GovEase addresses these issues by providing a fully digital service lifecycle.
 - Rate and review services  
 - View request and payment history  
 
----
 
 ### Government Office (Municipality User)
 - Manage services and categories  
@@ -55,7 +51,6 @@ GovEase addresses these issues by providing a fully digital service lifecycle.
 - Generate documents (certificates, receipts)  
 - View and respond to feedback  
 
----
 
 ### Admin
 - Manage municipalities and offices  
@@ -63,7 +58,6 @@ GovEase addresses these issues by providing a fully digital service lifecycle.
 - Monitor system activity  
 - Generate reports (requests, revenue)  
 
----
 
 ## Tech Stack
 
@@ -75,87 +69,11 @@ GovEase addresses these issues by providing a fully digital service lifecycle.
   - Payment APIs (card & cryptocurrency)  
   - Social login APIs  
 
----
 
 ## System Architecture
 
 The system follows a modular and scalable architecture using Laravel MVC and Eloquent ORM.
 
----
-
-## Entity Relationships
-
-### Core Structure
-- Municipality → has many Offices  
-- Office → belongs to Municipality  
-
-- Office → has many Services  
-- Service → belongs to Office and ServiceCategory  
-
----
-
-### User & Access
-- Role → has many Users  
-- User → belongs to Role and Office  
-
-- User → has many Messages (sent & received)  
-- Message → belongs to sender and receiver (User)  
-
----
-
-### Workflow
-- Appointment → belongs to User, Office, Service, Status  
-- Request → belongs to Status, Service, Appointment  
-
-- Status → has many Requests, Payments, Appointments  
-
----
-
-### Payments
-- Payment → belongs to Request and Status  
-- Request → has one Payment  
-
----
-
-### Many-to-Many Relationships
-
-#### User ↔ Request
-- Pivot table: `user_requests`
-
-#### Request ↔ Document
-- Pivot table: `document_requests`
-
----
-
-### Document Management
-- Document → belongs to User (uploaded_by)  
-- User → has many Documents  
-
----
-
-### Reviews
-- Review → belongs to User and Office  
-- User → has many Reviews  
-- Office → has many Reviews  
-
----
-
-## Database Design (ERD Summary)
-
-- **One-to-Many**
-  - Municipality → Office  
-  - Office → Service  
-  - Role → User  
-  - Status → Request / Payment / Appointment  
-
-- **Many-to-Many**
-  - User ↔ Request  
-  - Request ↔ Document  
-
-- **One-to-One**
-  - Request → Payment  
-
----
 
 ## Security Features
 
@@ -165,6 +83,29 @@ The system follows a modular and scalable architecture using Laravel MVC and Elo
 - Secure payment handling  
 - Data validation  
 
----
 
-## Project Structure
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/govease.git
+
+# Navigate into project
+cd govease
+
+# Install dependencies
+composer install
+
+# Copy environment file
+cp .env.example .env
+
+# Generate app key
+php artisan key:generate
+
+# Configure database in .env
+
+# Run migrations
+php artisan migrate
+
+# Start server
+php artisan serve
