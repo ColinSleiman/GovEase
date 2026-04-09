@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('document_requests', function (Blueprint $table) {
-            $table->id();
 
             // fk
             $table->foreignId("request_id")
@@ -26,6 +25,8 @@ return new class extends Migration
                 ->onDelete("cascade");
 
             $table->timestamps();
+
+            $table->primary(['request_id', 'document_id']);
         });
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use App\Models\DocumentRequest;
+use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -11,14 +13,8 @@ class DocumentRequestController extends Controller
     // Display all document requests
     public function index()
     {
-        try {
-            $data = DocumentRequest::all();
-            return response()->json($data, Response::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $data = DocumentRequest::with(['request', 'document'])->get();
+        return response()->json($data, Response::HTTP_OK);
     }
 
     // Show the form for creating a new document request
@@ -31,19 +27,29 @@ class DocumentRequestController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'request_id',
-            'document_id',
+            'request_id' => 'required|exists:requests,id',
+            'document_id' => 'required|exists:documents,id',
         ]);
 
         $documentRequest = DocumentRequest::create($validated);
 
-        return response()->json($documentRequest, Response::HTTP_CREATED);
+        return response()->json(
+            $documentRequest->load(['request', 'document']),
+            Response::HTTP_CREATED
+        );
     }
 
     // Display a specific document request
-    public function show(DocumentRequest $documentRequest)
+    public function show(RequestModel $requestModel, Document $document)
     {
-        return response()->json($documentRequest, Response::HTTP_OK);
+        $documentRequest = DocumentRequest::where('request_id', $requestModel->id)
+            ->where('document_id', $document->id)
+            ->firstOrFail();
+
+        return response()->json(
+            $documentRequest->load(['request', 'document']),
+            Response::HTTP_OK
+        );
     }
 
     // Show the form for editing a document request
@@ -53,22 +59,42 @@ class DocumentRequestController extends Controller
     }
 
     // Update a document request
-    public function update(Request $request, DocumentRequest $documentRequest)
+    public function update(Request $request, RequestModel $requestModel, Document $document)
     {
         $validated = $request->validate([
-            'request_id',
-            'document_id',
+            'request_id' => 'sometimes|required|exists:requests,id',
+            'document_id' => 'sometimes|required|exists:documents,id',
         ]);
 
-        $documentRequest->update($validated);
+        $existing = DocumentRequest::where('request_id', $requestModel->id)
+            ->where('document_id', $document->id)
+            ->firstOrFail();
 
-        return response()->json($documentRequest, Response::HTTP_OK);
+        $newRequestId = $validated['request_id'] ?? $requestModel->id;
+        $newDocumentId = $validated['document_id'] ?? $document->id;
+
+        if ($newRequestId !== $requestModel->id || $newDocumentId !== $document->id) {
+            DocumentRequest::where('request_id', $requestModel->id)
+                ->where('document_id', $document->id)
+                ->delete();
+            $existing = DocumentRequest::firstOrCreate([
+                'request_id' => $newRequestId,
+                'document_id' => $newDocumentId,
+            ]);
+        }
+
+        return response()->json(
+            $existing->load(['request', 'document']),
+            Response::HTTP_OK
+        );
     }
 
     // Delete a document request
-    public function destroy(DocumentRequest $documentRequest)
+    public function destroy(RequestModel $requestModel, Document $document)
     {
-        $documentRequest->delete();
+        DocumentRequest::where('request_id', $requestModel->id)
+            ->where('document_id', $document->id)
+            ->delete();
 
         return response()->json(['message' => 'DocumentRequest deleted successfully'], Response::HTTP_NO_CONTENT);
     }

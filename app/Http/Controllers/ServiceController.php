@@ -25,10 +25,10 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
-            'description',
-            'price',
-            'duration',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'duration' => 'required|integer',
             'office_id' => 'required|exists:offices,id',
             'service_category_id' => 'required|exists:service_categories,id',
         ]);
@@ -55,10 +55,10 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $validated = $request->validate([
-            'name',
-            'description',
-            'price',
-            'duration',
+            'name' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string',
+            'price' => 'sometimes|numeric',
+            'duration' => 'sometimes|integer',
             'office_id' => 'sometimes|required|exists:offices,id',
             'service_category_id' => 'sometimes|required|exists:service_categories,id',
         ]);

@@ -26,13 +26,13 @@ class OfficeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
-            'address',
-            'google_maps_location',
-            'latitude',
-            'longitude',
-            'working_hours',
-            'contact_info',
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'google_maps_location' => 'required|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'working_hours' => 'required|string',
+            'contact_info' => 'required|string',
             'municipality_id' => 'required|exists:municipalities,id',
         ]);
 
@@ -57,13 +57,13 @@ class OfficeController extends Controller
     public function update(Request $request, Office $office)
     {
         $validated = $request->validate([
-            'name',
-            'address',
-            'google_maps_location',
-            'latitude',
-            'longitude',
-            'working_hours',
-            'contact_info',
+            'name' => 'sometimes|required|string',
+            'address' => 'sometimes|required|string',
+            'google_maps_location' => 'sometimes|required|string',
+            'latitude' => 'sometimes|nullable|numeric',
+            'longitude' => 'sometimes|nullable|numeric',
+            'working_hours' => 'sometimes|required|string',
+            'contact_info' => 'sometimes|required|string',
             'municipality_id' => 'sometimes|required|exists:municipalities,id',
         ]);
 
