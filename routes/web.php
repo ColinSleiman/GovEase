@@ -1,120 +1,60 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\UserRequestController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\Register;
-use App\Http\Controllers\Auth\Login;
-use App\Http\Controllers\Auth\Logout;
 
+Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); });
 
-Route::get('/', function () {
-    return view('welcome');
+// auth routes
+Route::post('/register', [Register::class, '__invoke'])->middleware('guest');
+Route::post('/login', [Register::class, '__invoke'])->middleware('guest');
+Route::post('/logout', [Register::class, '__invoke'])->middleware('auth')->name('logout');
+
+// resources routes
+Route::resource('municipalities', MunicipalityController::class);
+Route::resource('offices', OfficeController::class);
+Route::resource('service-categories', ServiceCategoryController::class);
+Route::resource('services', ServiceController::class);
+
+Route::resource('statuses', StatusController::class);
+Route::resource('requests', RequestController::class);
+Route::resource('documents', DocumentController::class);
+Route::resource('document-requests', DocumentRequestController::class);
+Route::resource('payments', PaymentController::class);
+
+// admin routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/offices', [AdminController::class, 'offices'])->name('offices.index');
+    Route::get('/offices/create', [AdminController::class, 'officesCreate'])->name('offices.create');
+
+    Route::get('/municipalities', [AdminController::class, 'municipalities'])->name('municipalities.index');
+    Route::get('/municipalities/create', [AdminController::class, 'municipalitiesCreate'])->name('municipalities.create');
+
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::get('/users/create', [AdminController::class, 'usersCreate'])->name('users.create');
+
+    Route::get('/requests', [AdminController::class, 'requests'])->name('requests.index');
+    Route::get('/services/monitor', [AdminController::class, 'servicesMonitor'])->name('services.monitor');
+    Route::get('/reports/office-requests', [AdminController::class, 'reportsOfficeRequests'])->name('reports.office-requests');
+    Route::get('/reports/revenue', [AdminController::class, 'reportsRevenue'])->name('reports.revenue');
+
+    Route::get('/services', [AdminController::class, 'services'])->name('services.index');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');
+    Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications.index');
+    Route::get('/logs', [AdminController::class, 'logs'])->name('logs.index');
+    Route::get('/help', [AdminController::class, 'help'])->name('help.index');
 });
-
-
-Route::post('/register', [Register::class, '__invoke'])
-        ->middleware('guest');
-
-Route::post('/login', [Login::class, '__invoke'])
-        ->middleware('guest');
-
-Route::post('/logout', [Logout::class, '__invoke'])
-        ->middleware('auth')
-        ->name('logout');
-
-Route::resource('municipalities', MunicipalityController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('offices', OfficeController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('service-categories', ServiceCategoryController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('services', ServiceController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('appointments', AppointmentController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-
-Route::resource('statuses', StatusController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('requests', RequestController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('documents', DocumentController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-Route::resource('payments', PaymentController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-
-Route::resource('reviews', ReviewController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy',
-]);
-
-// pivot tables
-Route::get('document-requests', [DocumentRequestController::class, 'index']);
-Route::post('document-requests', [DocumentRequestController::class, 'store']);
-Route::get('document-requests/{request}/{document}', [DocumentRequestController::class, 'show']);
-Route::put('document-requests/{request}/{document}', [DocumentRequestController::class, 'update']);
-Route::delete('document-requests/{request}/{document}', [DocumentRequestController::class, 'destroy']);
-
-Route::get('user-requests', [UserRequestController::class, 'index']);
-Route::post('user-requests', [UserRequestController::class, 'store']);
-Route::get('user-requests/{user}/{request}', [UserRequestController::class, 'show']);
-Route::put('user-requests/{user}/{request}', [UserRequestController::class, 'update']);
-Route::delete('user-requests/{user}/{request}', [UserRequestController::class, 'destroy']);
