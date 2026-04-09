@@ -68,7 +68,7 @@
         </header>
         <!-- ***** Header Area End ***** -->
         
-
+        <!-- ***** Modal Start ***** -->
         <div id="modal" class="popupContainer" style="display:none;">
             <div class="popupHeader">
                 <span class="header_title">Portal Access</span>
@@ -154,6 +154,7 @@
                 </div>
             </section>
         </div>
+        <!-- ***** Modal End ***** -->
 
         <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
             <div class="container">
