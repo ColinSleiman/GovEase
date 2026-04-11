@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@yield('title', 'Admin Dashboard | GovEase')</title>
 
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            <script src="https://cdn.tailwindcss.com"></script>
-        @endif
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    
+
     <body class="min-h-screen bg-slate-100 text-slate-800 antialiased">
         <div class="flex min-h-screen">
             <aside class="hidden w-72 shrink-0 border-r border-slate-200 bg-slate-900 text-slate-100 lg:block">

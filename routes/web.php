@@ -1,28 +1,39 @@
 <?php
 
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DocumentRequestController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\RequestController;
-use App\Http\Controllers\StatusController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MunicipalityController;
-use App\Http\Controllers\OfficeController;
-use App\Http\Controllers\ServiceCategoryController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\Auth\Register;
+
+// Auth
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+
+// Admin
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\MunicipalityController;
+use App\Http\Controllers\Admin\OfficeController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceCategoryController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\Admin\UserController;
+
+// Public
+use App\Http\Controllers\Public\DocumentController;
+use App\Http\Controllers\Public\DocumentRequestController;
+use App\Http\Controllers\Public\MessageController;
+use App\Http\Controllers\Public\PaymentController;
+use App\Http\Controllers\Public\RequestController;
+use App\Http\Controllers\Public\ReviewController;
+
 
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); });
 
 // auth routes
-Route::post('/register', [Register::class, '__invoke'])->middleware('guest');
-Route::post('/login', [Register::class, '__invoke'])->middleware('guest');
-Route::post('/logout', [Register::class, '__invoke'])->middleware('auth')->name('logout');
+Route::post('/register', [RegisterController::class, '__invoke'])->middleware('guest');
+Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest');
+Route::post('/logout', [LogoutController::class, '__invoke'])->middleware('auth')->name('logout');
 
 // resources routes
-Route::resource('municipalities', MunicipalityController::class);
-Route::resource('offices', OfficeController::class);
 Route::resource('service-categories', ServiceCategoryController::class);
 Route::resource('services', ServiceController::class);
 
@@ -37,14 +48,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/offices', [AdminController::class, 'offices'])->name('offices.index');
-    Route::get('/offices/create', [AdminController::class, 'officesCreate'])->name('offices.create');
-
-    Route::get('/municipalities', [AdminController::class, 'municipalities'])->name('municipalities.index');
-    Route::get('/municipalities/create', [AdminController::class, 'municipalitiesCreate'])->name('municipalities.create');
-
-    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
-    Route::get('/users/create', [AdminController::class, 'usersCreate'])->name('users.create');
+    Route::resource('offices', OfficeController::class);
+    Route::resource('municipalities', MunicipalityController::class);
+    Route::resource('users', UserController::class);
 
     Route::get('/requests', [AdminController::class, 'requests'])->name('requests.index');
     Route::get('/services/monitor', [AdminController::class, 'servicesMonitor'])->name('services.monitor');

@@ -9,10 +9,14 @@ class Office extends Model
     protected $fillable = [
         'name',
         'address',
+
         'google_maps_location',
-        'latitude', 'longitude',
+        'latitude', 
+        'longitude',
+
         'working_hours',
         'contact_info',
+        
         'municipality_id'
     ];
 
