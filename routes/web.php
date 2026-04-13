@@ -26,11 +26,12 @@ use App\Http\Controllers\Public\RequestController;
 use App\Http\Controllers\Public\ReviewController;
 
 
-Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); });
+Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
+
 
 // auth routes
-Route::post('/register', [RegisterController::class, '__invoke'])->middleware('guest');
-Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest');
+Route::post('/register', [RegisterController::class, '__invoke'])->name('register');
+Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest')->name('login');
 Route::post('/logout', [LogoutController::class, '__invoke'])->middleware('auth')->name('logout');
 
 // resources routes
