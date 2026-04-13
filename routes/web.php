@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\OTPController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminController;
@@ -37,6 +38,10 @@ Route::post('/logout', [LogoutController::class, '__invoke'])->middleware('auth'
 
 Route::get('/api/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+
+Route::get('/verify-otp', [OTPController::class, 'show'])->name('otp.show');
+Route::post('/otp/send', [OTPController::class, 'send'])->middleware('auth')->name('otp.send');
+Route::post('/otp/verify', [OTPController::class, 'verify'])->middleware('auth')->name('otp.verify');
 
 // resources routes
 Route::resource('service-categories', ServiceCategoryController::class);

@@ -93,6 +93,26 @@
     </head>
 
     <body>
+        <!-- ***** Verification Alert ***** -->
+        @auth
+            @if (!Auth::user()->verified)
+                <div class="verification-alert" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 0;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Account Verification Required!</strong> 
+                                Please verify your account to access all features.
+                                <a href="{{ route('otp.show') }}" class="btn btn-sm" style="background: white; color: #ff6b6b; margin-left: 15px; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold;">
+                                    <i class="fa fa-shield-alt"></i> Verify Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endauth
+        
         <!-- ***** Preloader Start ***** -->
         <div id="js-preloader" class="js-preloader">
             <div class="preloader-inner">

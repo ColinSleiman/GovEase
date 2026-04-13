@@ -27,6 +27,7 @@ class RegisterController extends Controller
             'password' => Hash::make($validated['password']),
             'office_id' => null,
             'role_id' => 1, // Default Citizen role
+            'verified' => false, // New users need verification
         ]);
 
         Auth::login($user);
