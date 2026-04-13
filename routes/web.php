@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminController;
@@ -33,6 +34,9 @@ Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); }
 Route::post('/register', [RegisterController::class, '__invoke'])->name('register');
 Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest')->name('login');
 Route::post('/logout', [LogoutController::class, '__invoke'])->middleware('auth')->name('logout');
+
+Route::get('/api/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 // resources routes
 Route::resource('service-categories', ServiceCategoryController::class);

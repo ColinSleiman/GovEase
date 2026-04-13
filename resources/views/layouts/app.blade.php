@@ -175,7 +175,7 @@
 
                         </a>
 
-                        <a href="#" class="social_box google">
+                        <a href="{{ route('auth.google.redirect') }}" class="social_box google">
                             <span class="icon"><i class="fab fa-google-plus"></i></span>
                             <span class="icon_title">Continue with Google</span>
                         </a>
