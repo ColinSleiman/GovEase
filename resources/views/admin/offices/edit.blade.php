@@ -16,6 +16,16 @@
             @csrf
             @method('PUT')
 
+            @if ($errors->any())
+                <div class="md:col-span-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                    <ul class="list-disc space-y-1 pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Name</label>
                 <input type="text" name="name"
@@ -31,30 +41,9 @@
             </div>
 
             <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Google Maps Location</label>
-                <input type="text" name="google_maps_location"
-                    value="{{ old('google_maps_location', $office->google_maps_location) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Working Hours</label>
                 <input type="text" name="working_hours"
                     value="{{ old('working_hours', $office->working_hours) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Latitude</label>
-                <input type="number" step="any" name="latitude"
-                    value="{{ old('latitude', $office->latitude) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Longitude</label>
-                <input type="number" step="any" name="longitude"
-                    value="{{ old('longitude', $office->longitude) }}"
                     class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
             </div>
 
@@ -81,6 +70,10 @@
                     @endforeach
 
                 </select>
+
+                <p class="mt-2 text-xs text-slate-500">
+                    Google Maps location and coordinates are inherited automatically from the selected municipality.
+                </p>
             </div>
 
             <div class="md:col-span-2 flex flex-wrap gap-3">

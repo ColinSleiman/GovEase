@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Municipality extends Model
 {
+
     protected $fillable = [
         'name',
         'region',
@@ -19,8 +20,5 @@ class Municipality extends Model
         'contact_info'
     ];
 
-    public function offices()
-    {
-        return $this->hasMany(Office::class);
-    }
+    public function offices() { return $this->hasMany(Office::class); }
 }

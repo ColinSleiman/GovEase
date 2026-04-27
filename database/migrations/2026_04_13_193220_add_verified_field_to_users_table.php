@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('verified')->default(false)->after('email_verified_at');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_categories');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('verified');
+        });
     }
 };

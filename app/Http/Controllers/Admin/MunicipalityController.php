@@ -26,20 +26,21 @@ class MunicipalityController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'region' => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'google_maps_location' => ['nullable', 'string', 'max:255'],
+            'working_hours' => ['nullable', 'string', 'max:255'],
+            'contact_info' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $request->merge([
-            'google_maps_location' => $request->input('google_maps_location')
-                ?: $request->input('latitude') . ',' . $request->input('longitude'),
-        ]);
+        $validated['google_maps_location'] = $validated['google_maps_location']
+            ?: $validated['latitude'] . ',' . $validated['longitude'];
 
-        Municipality::create($request->all());
+        Municipality::create($validated);
         return redirect()->route('admin.municipalities.index');
     }
 
@@ -64,7 +65,22 @@ class MunicipalityController extends Controller
     public function update(Request $request, $id)
     {
         $municipality = Municipality::findOrFail($id);
-        $municipality->update($request->all());
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'region' => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'google_maps_location' => ['nullable', 'string', 'max:255'],
+            'working_hours' => ['nullable', 'string', 'max:255'],
+            'contact_info' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $validated['google_maps_location'] = $validated['google_maps_location']
+            ?: $validated['latitude'] . ',' . $validated['longitude'];
+
+        $municipality->update($validated);
         return redirect()->route('admin.municipalities.index');
     }
 
