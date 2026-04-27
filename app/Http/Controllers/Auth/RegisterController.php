@@ -25,10 +25,13 @@ class RegisterController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'office_id' => null,
+            'role_id' => 1, // Default Citizen role
+            'verified' => false, // New users need verification
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('/')->with('success','Logged In');
+        return redirect()->route('home')->with('success','Account created successfully');
     }
 }
