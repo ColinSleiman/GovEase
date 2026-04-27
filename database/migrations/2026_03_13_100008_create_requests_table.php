@@ -28,12 +28,11 @@ return new class extends Migration
                 ->on("services")
                 ->onDelete("cascade");
 
-            /*
             $table->foreignId("appointment_id")
                 ->references("id")
                 ->on("appointments")
                 ->onDelete("cascade");
-            */
+
 
             $table->timestamps();
         });
