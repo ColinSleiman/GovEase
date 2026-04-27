@@ -18,10 +18,101 @@
         <link rel="stylesheet" href="{{ asset('assets/css/templatemo-chain-app-dev.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/animated.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
+        
+        <style>
+        .field-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .user-indicator {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 150px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .user-dropdown a {
+            display: block;
+            padding: 8px 12px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .user-dropdown a:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+        
+        #registerBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        input:invalid {
+            border-color: #dc3545;
+        }
+        
+        input:valid {
+            border-color: #28a745;
+        }
+        </style>
 
     </head>
 
     <body>
+        <!-- ***** Verification Alert ***** -->
+        @auth
+            @if (!Auth::user()->verified)
+                <div class="verification-alert" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 0;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Account Verification Required!</strong> 
+                                Please verify your account to access all features.
+                                <a href="{{ route('otp.show') }}" class="btn btn-sm" style="background: white; color: #ff6b6b; margin-left: 15px; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold;">
+                                    <i class="fa fa-shield-alt"></i> Verify Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endauth
+        
         <!-- ***** Preloader Start ***** -->
         <div id="js-preloader" class="js-preloader">
             <div class="preloader-inner">
@@ -55,7 +146,26 @@
                             <li class="scroll-to-section"><a href="#about">Platform</a></li>
                             <li class="scroll-to-section"><a href="#pricing">Solutions</a></li>
                             <li class="scroll-to-section"><a href="#newsletter">Updates</a></li>
-                            <li><div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Access Portal</a></div></li> 
+                            <li class="user-indicator">
+                                @guest
+                                    <div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Access Portal</a></div>
+                                @else
+                                    <div class="gradient-button" style="position: relative;">
+                                        <a href="#" id="userMenu"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
+                                        <div class="user-dropdown" id="userDropdown">
+                                            <a href="#">Profile</a>
+                                            <a href="#">Settings</a>
+                                            <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                                            <form action="{{ route('logout') }}" method="POST">
+                                                @csrf
+                                                <button type="submit" style="background: none; border: none; color: #dc3545; padding: 8px 12px; width: 100%; text-align: left; cursor: pointer; font-size: 14px;">
+                                                    <i class="fa fa-sign-out-alt"></i> Logout
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endguest
+                            </li> 
                             </ul>        
                             <a class='menu-trigger'>
                                 <span>Menu</span>
@@ -85,7 +195,7 @@
 
                         </a>
 
-                        <a href="#" class="social_box google">
+                        <a href="{{ route('auth.google.redirect') }}" class="social_box google">
                             <span class="icon"><i class="fab fa-google-plus"></i></span>
                             <span class="icon_title">Continue with Google</span>
                         </a>
@@ -103,23 +213,39 @@
 
                 <!-- Username & Password Login form -->
                 <div class="user_login">
-                    <form>
-                        <label>Email or Username</label>
-                        <input type="text" />
+                    <form action="{{ route('login') }}" method="POST">
+                        @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required />
                         <br />
 
-                        <label>Password</label>
-                        <input type="password" />
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required />
                         <br />
 
                         <div class="checkbox">
-                            <input id="remember" type="checkbox" />
+                            <input id="remember" type="checkbox" name="remember" />
                             <label for="remember">Keep me signed in on this device</label>
                         </div>
 
                         <div class="action_btns">
                             <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                            <div class="one_half last"><a href="#" class="btn btn_red">Sign In</a></div>
+                            <div class="one_half last"><button type="submit" class="btn btn_red">Sign In</button></div>
                         </div>
                     </form>
 
@@ -128,27 +254,57 @@
 
                 <!-- Register Form -->
                 <div class="user_register">
-                    <form>
-                        <label>Full Name</label>
-                        <input type="text" />
+                    <form action="{{ route('register') }}" method="POST" id="registerForm">
+                        @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required minlength="2" maxlength="255" />
+                        <div class="field-error" id="name-error"></div>
                         <br />
 
-                        <label>Email Address</label>
-                        <input type="email" />
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required maxlength="255" />
+                        <div class="field-error" id="email-error"></div>
                         <br />
 
-                        <label>Password</label>
-                        <input type="password" />
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" name="password" required minlength="8" />
+                        <div class="field-error" id="password-error"></div>
+                        <small style="color: #666; font-size: 12px;">Minimum 8 characters</small>
+                        <br />
+
+                        <label for="password_confirmation">Confirm Password *</label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" />
+                        <div class="field-error" id="password_confirmation-error"></div>
                         <br />
 
                         <div class="checkbox">
-                            <input id="send_updates" type="checkbox" />
+                            <input id="send_updates" type="checkbox" name="send_updates" />
                             <label for="send_updates">Send me service updates and announcements</label>
                         </div>
 
                         <div class="action_btns">
                             <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                            <div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+                            <div class="one_half last"><button type="submit" class="btn btn_red">Register</button></div>
                         </div>
                     </form>
                 </div>
@@ -709,6 +865,23 @@
         <script src="{{ asset('assets/js/imagesloaded.js') }}"></script>
         <script src="{{ asset('assets/js/popup.js') }}"></script>
         <script src="{{ asset('assets/js/custom.js') }}"></script>
+        
+        <!-- User Dropdown Toggle -->
+        <script>
+        $(document).ready(function() {
+            $('#userMenu').click(function(e) {
+                e.preventDefault();
+                $('#userDropdown').toggle();
+            });
+            
+            // Close dropdown when clicking outside
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.user-indicator').length) {
+                    $('#userDropdown').hide();
+                }
+            });
+        });
+        </script>
     </body>
 
 </html>
