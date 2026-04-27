@@ -20,12 +20,9 @@
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Address</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Google Maps Location</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Latitude</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Longitude</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Working Hours</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Contact Info</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Municipality ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Municipality</th>
                             <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
                         </tr>
                     </thead>
@@ -35,12 +32,9 @@
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $office->id }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $office->name }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $office->address }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->google_maps_location }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->latitude }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->longitude }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $office->working_hours }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $office->contact_info }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->municipality_id }} - {{ $office->municipality->name }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->municipality?->name }}</td>
                                 <td class="px-4 py-3">
                                     <div class="flex justify-end gap-2">
                                         <x-admin.button :href="route('admin.offices.show', $office->id)" variant="white" class="px-3 py-1.5 text-xs">View</x-admin.button>
@@ -55,7 +49,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="px-4 py-6 text-center text-sm text-slate-500">No offices found.</td>
+                                <td colspan="7" class="px-4 py-6 text-center text-sm text-slate-500">No offices found.</td>
                             </tr>
                         @endforelse
                     </tbody>
