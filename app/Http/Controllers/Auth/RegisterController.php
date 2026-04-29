@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -16,18 +17,22 @@ class RegisterController extends Controller
     public function __invoke(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $citizenRole = Role::where(['name' => 'Citizen'])->firstOrFail();
+
         $user = User::create([
-            'name' => $validated['name'],
+            'firstName' => $validated['firstName'],
+            'lastName' => $validated['lastName'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'office_id' => null,
-            'role_id' => 1, // Default Citizen role
-            'verified' => false, // New users need verification
+            'role_id' => $citizenRole->id,
+            'verified' => false,
         ]);
 
         Auth::login($user);

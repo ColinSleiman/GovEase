@@ -20,74 +20,97 @@
         <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
         
         <style>
-        .field-error {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            font-weight: 500;
-        }
-        
-        .alert {
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-        
-        .alert-success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        
-        .alert-danger {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        
-        .user-indicator {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            min-width: 150px;
-            z-index: 1000;
-            display: none;
-        }
-        
-        .user-dropdown a {
-            display: block;
-            padding: 8px 12px;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .user-dropdown a:hover {
-            background-color: #f8f9fa;
-            color: #007bff;
-        }
-        
-        #registerBtn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        input:invalid {
-            border-color: #dc3545;
-        }
-        
-        input:valid {
-            border-color: #28a745;
-        }
+            .field-error {
+                color: #dc3545;
+                font-size: 12px;
+                margin-top: 5px;
+                font-weight: 500;
+            }
+            
+            .alert {
+                padding: 10px 15px;
+                margin-bottom: 15px;
+                border-radius: 4px;
+            }
+            
+            .alert-success {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                color: #155724;
+            }
+            
+            .alert-danger {
+                background-color: #f8d7da;
+                border: 1px solid #f5c6cb;
+                color: #721c24;
+            }
+            
+            .user-indicator {
+                position: relative;
+                display: inline-block;
+            }
+            
+            .user-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                min-width: 150px;
+                z-index: 1000;
+                display: none;
+            }
+            
+            .user-dropdown a {
+                display: block;
+                padding: 8px 12px;
+                color: #333;
+                text-decoration: none;
+                font-size: 14px;
+            }
+            
+            .user-dropdown a:hover {
+                background-color: #f8f9fa;
+                color: #007bff;
+            }
+            
+            #registerBtn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+            
+            input:invalid {
+                border-color: #dc3545;
+            }
+            
+            input:valid {
+                border-color: #28a745;
+            }
+
+            .register-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px 16px;
+            }
+
+            .register-grid .form-field label,
+            .register-grid .form-field input {
+                display: block;
+                width: 100%;
+            }
+
+            .register-grid .form-field small {
+                display: block;
+                margin-top: 4px;
+            }
+
+            @media (max-width: 576px) {
+                .register-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
 
     </head>
@@ -151,7 +174,7 @@
                                     <div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Access Portal</a></div>
                                 @else
                                     <div class="gradient-button" style="position: relative;">
-                                        <a href="#" id="userMenu"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
+                                        <a href="#" id="userMenu"><i class="fa fa-user"></i> {{ Auth::user()->full_name }}</a>
                                         <div class="user-dropdown" id="userDropdown">
                                             <a href="#">Profile</a>
                                             <a href="#">Settings</a>
@@ -189,12 +212,6 @@
                 <!-- Social Login -->
                 <div class="social_login">
                     <div class="">
-                        <a href="#" class="social_box fb">
-                            <span class="icon"><i class="fab fa-facebook"></i></span>
-                            <span class="icon_title">Continue with Facebook</span>
-
-                        </a>
-
                         <a href="{{ route('auth.google.redirect') }}" class="social_box google">
                             <span class="icon"><i class="fab fa-google-plus"></i></span>
                             <span class="icon_title">Continue with Google</span>
@@ -276,31 +293,39 @@
                             </div>
                         @endif
                         
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}" required minlength="2" maxlength="255" />
-                        <div class="field-error" id="name-error"></div>
-                        <br />
+                        <div class="register-grid">
+                            <div class="form-field">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" value="{{ old('firstName') }}" required minlength="2" maxlength="255" />
+                                <div class="field-error" id="firstName-error"></div>
+                            </div>
 
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required maxlength="255" />
-                        <div class="field-error" id="email-error"></div>
-                        <br />
+                            <div class="form-field">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" value="{{ old('lastName') }}" required minlength="2" maxlength="255" />
+                                <div class="field-error" id="lastName-error"></div>
+                            </div>
 
-                        <label for="password">Password *</label>
-                        <input type="password" id="password" name="password" required minlength="8" />
-                        <div class="field-error" id="password-error"></div>
-                        <small style="color: #666; font-size: 12px;">Minimum 8 characters</small>
-                        <br />
+                            <div class="form-field">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" required maxlength="255" />
+                                <div class="field-error" id="email-error"></div>
+                            </div>
 
-                        <label for="password_confirmation">Confirm Password *</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" />
-                        <div class="field-error" id="password_confirmation-error"></div>
-                        <br />
+                            <div class="form-field">
+                                <label for="password">Password *</label>
+                                <input type="password" id="password" name="password" required minlength="8" />
+                                <div class="field-error" id="password-error"></div>
+                                <small style="color: #666; font-size: 12px;">Minimum 8 characters</small>
+                            </div>
 
-                        <div class="checkbox">
-                            <input id="send_updates" type="checkbox" name="send_updates" />
-                            <label for="send_updates">Send me service updates and announcements</label>
+                            <div class="form-field">
+                                <label for="password_confirmation">Confirm Password *</label>
+                                <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" />
+                                <div class="field-error" id="password_confirmation-error"></div>
+                            </div>
                         </div>
+                        <br />
 
                         <div class="action_btns">
                             <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>

@@ -18,14 +18,20 @@ class OfficeController extends Controller
     public function create()
     {
         $data = Municipality::all();
-        $apiKey = env('GOOGLE_MAPS_API_KEY');
 
-        return view('admin.offices.create', compact('data', 'apiKey'));
+        return view('admin.offices.create', compact('data'));
     }
 
     public function store(Request $request)
     {
-        Office::create($request->all());
+        $data = $request->all();
+        $municipality = Municipality::findOrFail($request->municipality_id);
+
+        $data['google_maps_location'] = $municipality->google_maps_location;
+        $data['latitude'] = $municipality->latitude;
+        $data['longitude'] = $municipality->longitude;
+
+        Office::create($data);
         return redirect()->route('admin.offices.index');
     }
 
@@ -45,7 +51,14 @@ class OfficeController extends Controller
     public function update(Request $request, $id)
     {
         $row = Office::findOrFail($id);
-        $row->update($request->all());
+        $data = $request->all();
+        $municipality = Municipality::findOrFail($request->municipality_id);
+
+        $data['google_maps_location'] = $municipality->google_maps_location;
+        $data['latitude'] = $municipality->latitude;
+        $data['longitude'] = $municipality->longitude;
+
+        $row->update($data);
         return redirect()->route('admin.offices.index');
     }
 

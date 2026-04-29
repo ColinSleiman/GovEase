@@ -133,7 +133,7 @@
                             @forelse ($users as $user)
                                 <tr class="hover:bg-slate-50">
                                     <td class="px-4 py-3 text-sm text-slate-700">{{ $user->id }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $user->name }}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $user->full_name }}</td>
                                     <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email }}</td>
                                     <td class="px-4 py-3">
                                         <div class="flex justify-end gap-2">

@@ -15,33 +15,42 @@
                 @method('PUT')
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Name</label>
-                    <input type="text" name="name" value="{{ old('name', $row->name) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">First Name</label>
+                    <input type="text" name="firstName" value="{{ old('firstName', $row->firstName) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Last Name</label>
+                    <input type="text" name="lastName" value="{{ old('lastName', $row->lastName) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Email</label>
                     <input type="email" name="email" value="{{ old('email', $row->email) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Email Verified At</label>
-                    <input type="datetime-local" name="email_verified_at" value="{{ old('email_verified_at', $row->email_verified_at ? \Illuminate\Support\Carbon::parse($row->email_verified_at)->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-                </div>
-                <div class="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
-                    <input type="hidden" name="two_factor_authentication" value="0">
-                    <input type="checkbox" name="two_factor_authentication" value="1" @checked(old('two_factor_authentication', $row->two_factor_authentication)) class="h-4 w-4 rounded border-slate-300 text-blue-600">
-                    <label class="text-sm font-medium text-slate-700">Two Factor Authentication</label>
-                </div>
-                <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Password</label>
                     <input type="password" name="password" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Office ID</label>
-                    <input type="number" name="office_id" value="{{ old('office_id', $row->office_id) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Office</label>
+                    <select name="office_id" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        <option value="">Select Office</option>
+                        @foreach($offices as $office)
+                            <option value="{{ $office->id }}" {{ old('office_id', $row->office_id) == $office->id ? 'selected' : '' }}>
+                                {{ $office->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Role ID</label>
-                    <input type="number" name="role_id" value="{{ old('role_id', $row->role_id) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Role</label>
+                    <select name="role_id" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        <option value="">Select Role</option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ old('role_id', $row->role_id) == $role->id ? 'selected' : '' }}>
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="md:col-span-2 flex flex-wrap gap-3">

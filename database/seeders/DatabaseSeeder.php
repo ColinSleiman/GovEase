@@ -10,9 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $this->call([
@@ -22,10 +19,11 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
+            'firstName' => 'Test',
+            'lastName' => 'User',
             'email' => 'test@example.com',
             'office_id' => null,
-            'role_id' => 1, // Citizen role
+            'role_id' => 1,
         ]);
     }
 }

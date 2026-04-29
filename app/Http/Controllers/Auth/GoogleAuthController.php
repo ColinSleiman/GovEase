@@ -39,11 +39,14 @@ class GoogleAuthController extends Controller
             // Log the user in if they already exist
             Auth::login($existingUser);
         } else {
+            $nameParts = preg_split('/\s+/', trim((string) $user->name), 2);
+
             // Otherwise, create a new user and log them in
             $newUser = User::updateOrCreate([
                 'email' => $user->email
             ], [
-                'name' => $user->name,
+                'firstName' => $user->user['given_name'] ?? $nameParts[0] ?? '',
+                'lastName' => $user->user['family_name'] ?? $nameParts[1] ?? '',
                 'password' => bcrypt(Str::random(16)), // Set a random password
                 'email_verified_at' => now(),
                 'verified' => false // Google users also need verification

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Office;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,13 +12,16 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = User::all();
+        $data = User::with(['office', 'role'])->get();
         return view('admin.users.index', compact('data'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        $offices = Office::all();
+        $roles = Role::all();
+
+        return view('admin.users.create', compact('offices', 'roles'));
     }
 
     public function store(Request $request)
@@ -34,7 +39,10 @@ class UserController extends Controller
     public function edit($id)
     {
         $row = User::findOrFail($id);
-        return view('admin.users.edit', compact('row'));
+        $offices = Office::all();
+        $roles = Role::all();
+
+        return view('admin.users.edit', compact('row', 'offices', 'roles'));
     }
 
     public function update(Request $request, $id)

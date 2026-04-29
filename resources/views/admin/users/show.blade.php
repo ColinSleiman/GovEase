@@ -18,12 +18,13 @@
         <section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
             <dl class="divide-y divide-slate-200">
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">ID</dt><dd class="text-sm text-slate-900">{{ $row->id }}</dd></div>
-                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Name</dt><dd class="text-sm text-slate-900">{{ $row->name }}</dd></div>
+                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">First Name</dt><dd class="text-sm text-slate-900">{{ $row->firstName }}</dd></div>
+                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Last Name</dt><dd class="text-sm text-slate-900">{{ $row->lastName }}</dd></div>
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Email</dt><dd class="text-sm text-slate-900">{{ $row->email }}</dd></div>
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Email Verified At</dt><dd class="text-sm text-slate-900">{{ $row->email_verified_at }}</dd></div>
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Two Factor Authentication</dt><dd class="text-sm text-slate-900">{{ $row->two_factor_authentication }}</dd></div>
-                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Office ID</dt><dd class="text-sm text-slate-900">{{ $row->office_id }}</dd></div>
-                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Role ID</dt><dd class="text-sm text-slate-900">{{ $row->role_id }}</dd></div>
+                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Office Name</dt><dd class="text-sm text-slate-900">{{ $row->office_id }} - {{ $row->office?->name}}</dd></div>
+                <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Role</dt><dd class="text-sm text-slate-900">{{ $row->role?->name}}</dd></div>
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Created At</dt><dd class="text-sm text-slate-900">{{ $row->created_at }}</dd></div>
                 <div class="grid gap-2 px-6 py-4 md:grid-cols-[220px,1fr]"><dt class="text-sm font-semibold text-slate-600">Updated At</dt><dd class="text-sm text-slate-900">{{ $row->updated_at }}</dd></div>
             </dl>

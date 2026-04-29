@@ -24,9 +24,17 @@
     @csrf
     
     <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required autofocus>
-        @error('name')
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="{{ old('firstName') }}" required autofocus>
+        @error('firstName')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="{{ old('lastName') }}" required>
+        @error('lastName')
             <span class="text-danger">{{ $message }}</span>
         @enderror
     </div>

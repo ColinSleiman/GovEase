@@ -19,8 +19,5 @@ class Municipality extends Model
         'contact_info'
     ];
 
-    public function offices()
-    {
-        return $this->hasMany(Office::class);
-    }
+    public function offices() { return $this->hasMany(Office::class); }
 }

@@ -18,12 +18,13 @@
                     <thead class="bg-slate-50">
                         <tr>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">First Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Last Name</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email Verified At</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Two Factor Authentication</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Office ID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Role ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Office</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Role</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Created At</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Updated At</th>
                             <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
@@ -33,12 +34,13 @@
                         @forelse ($data as $user)
                             <tr class="hover:bg-slate-50">
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->id }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->name }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->firstName }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->lastName }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email_verified_at }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->two_factor_authentication }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->office_id }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->role_id }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->office?->name ?? 'None' }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->role?->name ?? 'None' }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->created_at }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ $user->updated_at }}</td>
                                 <td class="px-4 py-3">
@@ -55,7 +57,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="px-4 py-6 text-center text-sm text-slate-500">No users found.</td>
+                                <td colspan="11" class="px-4 py-6 text-center text-sm text-slate-500">No users found.</td>
                             </tr>
                         @endforelse
                     </tbody>

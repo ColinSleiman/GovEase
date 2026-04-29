@@ -31,30 +31,9 @@
             </div>
 
             <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Google Maps Location</label>
-                <input type="text" name="google_maps_location"
-                    value="{{ old('google_maps_location', $office->google_maps_location) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Working Hours</label>
                 <input type="text" name="working_hours"
                     value="{{ old('working_hours', $office->working_hours) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Latitude</label>
-                <input type="number" step="any" name="latitude"
-                    value="{{ old('latitude', $office->latitude) }}"
-                    class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-medium text-slate-700">Longitude</label>
-                <input type="number" step="any" name="longitude"
-                    value="{{ old('longitude', $office->longitude) }}"
                     class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
             </div>
 
@@ -68,7 +47,7 @@
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Municipality</label>
 
-                <select name="municipality_id"
+                <select name="municipality_id" required
                     class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
 
                     <option value="">Select Municipality</option>
