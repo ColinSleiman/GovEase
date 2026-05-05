@@ -29,9 +29,8 @@ use App\Http\Controllers\Public\ReviewController;
 
 
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
-Route::get('/portal-access', function () { 
-    return view('auth.portal', ['title' => 'Portal Access']);
-})->middleware('guest')->name('portal.access');
+Route::get('/portal-access', function () { return view('auth.portal', ['title' => 'Portal Access']); })->middleware('guest')->name('portal.access');
+
 
 // auth routes
 Route::post('/register', [RegisterController::class, '__invoke'])->name('register');
@@ -47,6 +46,7 @@ Route::middleware(['check.auth'])->group(function () {
 Route::get('/api/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
+
 // resources routes
 Route::resource('service-categories', ServiceCategoryController::class);
 Route::resource('services', ServiceController::class);
@@ -56,6 +56,7 @@ Route::resource('requests', RequestController::class);
 Route::resource('documents', DocumentController::class);
 Route::resource('document-requests', DocumentRequestController::class);
 Route::resource('payments', PaymentController::class);
+
 
 // admin routes
 Route::middleware(['check.auth', 'check.admin'])->prefix('admin')->name('admin.')->group(function () {
