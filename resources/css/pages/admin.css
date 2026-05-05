@@ -1,0 +1,73 @@
+@layer components {
+    .admin-page {
+        @apply space-y-6;
+    }
+
+    .admin-page-header {
+        @apply flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-start sm:justify-between;
+    }
+
+    .admin-page-title {
+        @apply text-2xl font-bold text-slate-900;
+    }
+
+    .admin-page-subtitle {
+        @apply mt-2 text-sm text-slate-600;
+    }
+
+    .admin-table-wrap {
+        @apply overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm;
+    }
+
+    .admin-table-scroll {
+        @apply overflow-x-auto;
+    }
+
+    .admin-table {
+        @apply min-w-full divide-y divide-slate-200;
+    }
+
+    .admin-table-head {
+        @apply bg-slate-50;
+    }
+
+    .admin-table-th {
+        @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500;
+    }
+
+    .admin-table-th-right {
+        @apply px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500;
+    }
+
+    .admin-table-body {
+        @apply divide-y divide-slate-200 bg-white;
+    }
+
+    .admin-table-row {
+        @apply hover:bg-slate-50;
+    }
+
+    .admin-table-td {
+        @apply px-4 py-3 text-sm text-slate-700;
+    }
+
+    .admin-table-actions-cell {
+        @apply px-4 py-3;
+    }
+
+    .admin-actions {
+        @apply flex justify-end gap-2;
+    }
+
+    .admin-empty {
+        @apply px-4 py-6 text-center text-sm text-slate-500;
+    }
+
+    .admin-form-grid {
+        @apply grid gap-5 md:grid-cols-2;
+    }
+
+    .admin-form-actions {
+        @apply md:col-span-2 flex flex-wrap gap-3;
+    }
+}

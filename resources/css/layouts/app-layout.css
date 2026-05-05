@@ -1,0 +1,29 @@
+@layer components {
+    .admin-layout-body {
+        @apply min-h-screen bg-slate-100 text-slate-800 antialiased;
+    }
+
+    .admin-layout-shell {
+        @apply flex min-h-screen;
+    }
+
+    .admin-layout-sidebar {
+        @apply hidden w-72 shrink-0 border-r border-slate-200 bg-slate-900 text-slate-100 lg:block;
+    }
+
+    .admin-layout-content {
+        @apply flex min-w-0 flex-1 flex-col;
+    }
+
+    .admin-layout-main {
+        @apply flex-1 p-4 sm:p-6 lg:p-8;
+    }
+
+    .admin-layout-container {
+        @apply mx-auto max-w-7xl;
+    }
+
+    .admin-layout-mobile-sidebar {
+        @apply mb-6 rounded-xl border border-slate-200 bg-white p-3 shadow-sm lg:hidden;
+    }
+}

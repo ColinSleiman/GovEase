@@ -3,56 +3,56 @@
 @section('title', 'Admin Dashboard | GovEase')
 
 @section('content')
-    <div class="space-y-6">
-        <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h1 class="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
-            <p class="mt-2 text-sm text-slate-600">
+    <div class="admin-page">
+        <section class="card-padded">
+            <h1 class="admin-page-title">Admin Dashboard</h1>
+            <p class="admin-page-subtitle">
                 Manage offices, municipalities, and users with simple CRUD pages and quick preview tables.
             </p>
         </section>
 
         <section class="space-y-6">
-            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="card-padded">
+                <div class="card-header">
                     <div>
-                        <h2 class="text-xl font-semibold text-slate-900">Municipalities</h2>
-                        <p class="text-sm text-slate-600">Latest 5 municipality records.</p>
+                        <h2 class="card-title">Municipalities</h2>
+                        <p class="card-subtitle">Latest 5 municipality records.</p>
                     </div>
                     <div class="flex gap-3">
-                        <x-admin.button :href="route('admin.municipalities.create')" variant="green">Create Municipality</x-admin.button>
-                        <x-admin.button :href="route('admin.municipalities.index')" variant="white">View All</x-admin.button>
+                        <x-admin.actions.button :href="route('admin.municipalities.create')" variant="green">Create Municipality</x-admin.actions.button>
+                        <x-admin.actions.button :href="route('admin.municipalities.index')" variant="white">View All</x-admin.actions.button>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-200">
-                        <thead class="bg-slate-50">
+                <div class="admin-table-scroll">
+                    <table class="admin-table">
+                        <thead class="admin-table-head">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Region</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                                <th class="admin-table-th">ID</th>
+                                <th class="admin-table-th">Name</th>
+                                <th class="admin-table-th">Region</th>
+                                <th class="admin-table-th-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200">
+                        <tbody class="admin-table-body">
                             @forelse ($municipalities as $municipality)
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->id }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->name }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->region }}</td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex justify-end gap-2">
-                                            <x-admin.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                                <tr class="admin-table-row">
+                                    <td class="admin-table-td">{{ $municipality->id }}</td>
+                                    <td class="admin-table-td">{{ $municipality->name }}</td>
+                                    <td class="admin-table-td">{{ $municipality->region }}</td>
+                                    <td class="admin-table-actions-cell">
+                                        <div class="admin-actions">
+                                            <x-admin.actions.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
                                             <form action="{{ route('admin.municipalities.destroy', $municipality->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-sm text-slate-500">No municipalities found.</td>
+                                    <td colspan="4" class="admin-empty">No municipalities found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -60,47 +60,47 @@
                 </div>
             </div>
 
-            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="card-padded">
+                <div class="card-header">
                     <div>
-                        <h2 class="text-xl font-semibold text-slate-900">Offices</h2>
-                        <p class="text-sm text-slate-600">Latest 5 office records.</p>
+                        <h2 class="card-title">Offices</h2>
+                        <p class="card-subtitle">Latest 5 office records.</p>
                     </div>
                     <div class="flex gap-3">
-                        <x-admin.button :href="route('admin.offices.create')" variant="green">Create Office</x-admin.button>
-                        <x-admin.button :href="route('admin.offices.index')" variant="white">View All</x-admin.button>
+                        <x-admin.actions.button :href="route('admin.offices.create')" variant="green">Create Office</x-admin.actions.button>
+                        <x-admin.actions.button :href="route('admin.offices.index')" variant="white">View All</x-admin.actions.button>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-200">
-                        <thead class="bg-slate-50">
+                <div class="admin-table-scroll">
+                    <table class="admin-table">
+                        <thead class="admin-table-head">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Municipality ID</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                                <th class="admin-table-th">ID</th>
+                                <th class="admin-table-th">Name</th>
+                                <th class="admin-table-th">Municipality ID</th>
+                                <th class="admin-table-th-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200">
+                        <tbody class="admin-table-body">
                             @forelse ($offices as $office)
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $office->id }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $office->name }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $office->municipality_id }}</td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex justify-end gap-2">
-                                            <x-admin.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                                <tr class="admin-table-row">
+                                    <td class="admin-table-td">{{ $office->id }}</td>
+                                    <td class="admin-table-td">{{ $office->name }}</td>
+                                    <td class="admin-table-td">{{ $office->municipality_id }}</td>
+                                    <td class="admin-table-actions-cell">
+                                        <div class="admin-actions">
+                                            <x-admin.actions.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
                                             <form action="{{ route('admin.offices.destroy', $office->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-sm text-slate-500">No offices found.</td>
+                                    <td colspan="4" class="admin-empty">No offices found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -108,47 +108,47 @@
                 </div>
             </div>
 
-            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="card-padded">
+                <div class="card-header">
                     <div>
-                        <h2 class="text-xl font-semibold text-slate-900">Users</h2>
-                        <p class="text-sm text-slate-600">Latest 5 user records.</p>
+                        <h2 class="card-title">Users</h2>
+                        <p class="card-subtitle">Latest 5 user records.</p>
                     </div>
                     <div class="flex gap-3">
-                        <x-admin.button :href="route('admin.users.create')" variant="green">Create User</x-admin.button>
-                        <x-admin.button :href="route('admin.users.index')" variant="white">View All</x-admin.button>
+                        <x-admin.actions.button :href="route('admin.users.create')" variant="green">Create User</x-admin.actions.button>
+                        <x-admin.actions.button :href="route('admin.users.index')" variant="white">View All</x-admin.actions.button>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-200">
-                        <thead class="bg-slate-50">
+                <div class="admin-table-scroll">
+                    <table class="admin-table">
+                        <thead class="admin-table-head">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                                <th class="admin-table-th">ID</th>
+                                <th class="admin-table-th">Name</th>
+                                <th class="admin-table-th">Email</th>
+                                <th class="admin-table-th-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200">
+                        <tbody class="admin-table-body">
                             @forelse ($users as $user)
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $user->id }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $user->full_name }}</td>
-                                    <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email }}</td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex justify-end gap-2">
-                                            <x-admin.button :href="route('admin.users.edit', $user->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                                <tr class="admin-table-row">
+                                    <td class="admin-table-td">{{ $user->id }}</td>
+                                    <td class="admin-table-td">{{ $user->full_name }}</td>
+                                    <td class="admin-table-td">{{ $user->email }}</td>
+                                    <td class="admin-table-actions-cell">
+                                        <div class="admin-actions">
+                                            <x-admin.actions.button :href="route('admin.users.edit', $user->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-sm text-slate-500">No users found.</td>
+                                    <td colspan="4" class="admin-empty">No users found.</td>
                                 </tr>
                             @endforelse
                         </tbody>

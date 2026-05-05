@@ -1,0 +1,152 @@
+@layer components {
+    .portal-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #eef3ff, #f8f3ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 12px;
+    }
+
+    .portal-shell {
+        width: 100%;
+        max-width: 1020px;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 18px 48px rgba(52, 73, 94, 0.16);
+    }
+
+    .portal-banner {
+        background: linear-gradient(135deg, #4b8ef1, #6f42c1);
+        color: #fff;
+        padding: 42px 34px;
+        height: 100%;
+    }
+
+    .portal-banner h2 {
+        color: #fff;
+        margin-bottom: 12px;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .portal-content {
+        padding: 34px 32px;
+        background: #fff;
+    }
+
+    .portal-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+        color: #1f2937;
+    }
+
+    .portal-subtitle {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .portal-tab-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .portal-tab-buttons .btn {
+        flex: 1;
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .portal-tab-buttons .btn.active {
+        background: linear-gradient(135deg, #4b8ef1, #6f42c1);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .portal-panel {
+        border: 1px solid #e5eaf5;
+        border-radius: 14px;
+        padding: 18px;
+        background: #fbfcff;
+    }
+
+    .google-login {
+        display: block;
+        text-align: center;
+        border: 1px solid #dce3ef;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        color: #222;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .google-login:hover {
+        color: #222;
+        background: #f8faff;
+        text-decoration: none;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        min-height: 44px;
+    }
+
+    .btn-primary-main {
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4b8ef1, #6f42c1);
+        color: #fff;
+        padding: 11px 16px;
+        font-weight: 600;
+    }
+
+    .btn-primary-main:hover {
+        color: #fff;
+        opacity: 0.95;
+    }
+
+    .back-link-mobile {
+        border: 1px solid #dce3ef;
+        border-radius: 999px;
+        padding: 5px 12px;
+        text-decoration: none;
+        color: #4b8ef1;
+        font-weight: 600;
+    }
+
+    .back-link-mobile:hover {
+        text-decoration: none;
+        color: #4b8ef1;
+        background: #f2f7ff;
+    }
+
+    .portal-alert {
+        border-radius: 10px;
+        margin-bottom: 14px;
+    }
+
+    @media (max-width: 991px) {
+        .portal-content {
+            padding: 24px;
+        }
+
+        .portal-title {
+            font-size: 24px;
+        }
+
+        .portal-tab-buttons .btn {
+            font-size: 14px;
+            padding: 9px 14px;
+        }
+
+        .portal-panel {
+            padding: 14px;
+        }
+    }
+}

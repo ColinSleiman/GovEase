@@ -3,61 +3,72 @@
 @section('title', 'Users | GovEase Admin')
 
 @section('content')
-    <div class="space-y-6">
-        <section class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div class="admin-page">
+        <section class="admin-page-header">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Users</h1>
-                <p class="mt-2 text-sm text-slate-600">Manage user records with simple CRUD actions.</p>
+                <h1 class="admin-page-title">Users</h1>
+                <p class="admin-page-subtitle">Manage user records with simple CRUD actions.</p>
             </div>
-            <x-admin.button :href="route('admin.users.create')" variant="green">Create New User</x-admin.button>
+            <x-admin.actions.button :href="route('admin.users.create')" variant="green">Create New User</x-admin.actions.button>
         </section>
 
-        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-50">
+        <div class="admin-table-wrap">
+            <div class="admin-table-scroll">
+                <table class="admin-table">
+                    <thead class="admin-table-head">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">First Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Last Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email Verified At</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Two Factor Authentication</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Office</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Role</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Created At</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Updated At</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">First Name</th>
+                            <th class="admin-table-th">Last Name</th>
+                            <th class="admin-table-th">Email</th>
+                            <th class="admin-table-th">Email Verified At</th>
+                            <th class="admin-table-th">Two Factor Authentication</th>
+                            <th class="admin-table-th">Office</th>
+                            <th class="admin-table-th">Role</th>
+                            <th class="admin-table-th">Status</th>
+                            <th class="admin-table-th">Created At</th>
+                            <th class="admin-table-th">Updated At</th>
+                            <th class="admin-table-th-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 bg-white">
+                    <tbody class="admin-table-body">
                         @forelse ($data as $user)
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->id }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->firstName }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->lastName }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->email_verified_at }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->two_factor_authentication }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->office?->name ?? 'None' }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->role?->name ?? 'None' }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->created_at }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $user->updated_at }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex justify-end gap-2">
-                                        <x-admin.button :href="route('admin.users.show', $user->id)" variant="white" class="px-3 py-1.5 text-xs">View</x-admin.button>
-                                        <x-admin.button :href="route('admin.users.edit', $user->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $user->id }}</td>
+                                <td class="admin-table-td">{{ $user->firstName }}</td>
+                                <td class="admin-table-td">{{ $user->lastName }}</td>
+                                <td class="admin-table-td">{{ $user->email }}</td>
+                                <td class="admin-table-td">{{ $user->email_verified_at }}</td>
+                                <td class="admin-table-td">{{ $user->two_factor_authentication }}</td>
+                                <td class="admin-table-td">{{ $user->office?->name ?? 'None' }}</td>
+                                <td class="admin-table-td">{{ $user->role?->name ?? 'None' }}</td>
+                                <td class="admin-table-td font-medium {{ $user->is_active ? 'text-emerald-600' : 'text-red-600' }}">
+                                    {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                </td>
+                                <td class="admin-table-td">{{ $user->created_at }}</td>
+                                <td class="admin-table-td">{{ $user->updated_at }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.users.show', $user->id)" variant="white" class="btn-xs">View</x-admin.actions.button>
+                                        <x-admin.actions.button :href="route('admin.users.edit', $user->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
+                                        <form action="{{ route('admin.users.toggle-status', $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <x-admin.actions.button :variant="$user->is_active ? 'red' : 'green'" type="submit" class="btn-xs">
+                                                {{ $user->is_active ? 'Deactivate' : 'Activate' }}
+                                            </x-admin.actions.button>
+                                        </form>
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="11" class="px-4 py-6 text-center text-sm text-slate-500">No users found.</td>
+                                <td colspan="12" class="admin-empty">No users found.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -3,59 +3,59 @@
 @section('title', 'Offices | GovEase Admin')
 
 @section('content')
-    <div class="space-y-6">
-        <section class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div class="admin-page">
+        <section class="admin-page-header">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Offices</h1>
-                <p class="mt-2 text-sm text-slate-600">Manage office records with simple CRUD actions.</p>
+                <h1 class="admin-page-title">Offices</h1>
+                <p class="admin-page-subtitle">Manage office records with simple CRUD actions.</p>
             </div>
-            <x-admin.button :href="route('admin.offices.create')" variant="green">Create New Office</x-admin.button>
+            <x-admin.actions.button :href="route('admin.offices.create')" variant="green">Create New Office</x-admin.actions.button>
         </section>
 
-        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-50">
+        <div class="admin-table-wrap">
+            <div class="admin-table-scroll">
+                <table class="admin-table">
+                    <thead class="admin-table-head">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Address</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Google Maps Location</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Latitude</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Longitude</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Working Hours</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Contact Info</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Municipality ID</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">Name</th>
+                            <th class="admin-table-th">Address</th>
+                            <th class="admin-table-th">Google Maps Location</th>
+                            <th class="admin-table-th">Latitude</th>
+                            <th class="admin-table-th">Longitude</th>
+                            <th class="admin-table-th">Working Hours</th>
+                            <th class="admin-table-th">Contact Info</th>
+                            <th class="admin-table-th">Municipality ID</th>
+                            <th class="admin-table-th-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 bg-white">
+                    <tbody class="admin-table-body">
                         @forelse ($data as $office)
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->id }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->name }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->address }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->google_maps_location }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->latitude }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->longitude }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->working_hours }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->contact_info }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $office->municipality_id }} - {{ $office->municipality->name }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex justify-end gap-2">
-                                        <x-admin.button :href="route('admin.offices.show', $office->id)" variant="white" class="px-3 py-1.5 text-xs">View</x-admin.button>
-                                        <x-admin.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $office->id }}</td>
+                                <td class="admin-table-td">{{ $office->name }}</td>
+                                <td class="admin-table-td">{{ $office->address }}</td>
+                                <td class="admin-table-td">{{ $office->google_maps_location }}</td>
+                                <td class="admin-table-td">{{ $office->latitude }}</td>
+                                <td class="admin-table-td">{{ $office->longitude }}</td>
+                                <td class="admin-table-td">{{ $office->working_hours }}</td>
+                                <td class="admin-table-td">{{ $office->contact_info }}</td>
+                                <td class="admin-table-td">{{ $office->municipality_id }} - {{ $office->municipality->name }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.offices.show', $office->id)" variant="white" class="btn-xs">View</x-admin.actions.button>
+                                        <x-admin.actions.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
                                         <form action="{{ route('admin.offices.destroy', $office->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="px-4 py-6 text-center text-sm text-slate-500">No offices found.</td>
+                                <td colspan="10" class="admin-empty">No offices found.</td>
                             </tr>
                         @endforelse
                     </tbody>

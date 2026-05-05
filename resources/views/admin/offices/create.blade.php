@@ -53,8 +53,8 @@
             </div>
 
             <div class="md:col-span-2 flex flex-wrap gap-3">
-                <x-admin.button variant="green" type="submit">Create Office</x-admin.button>
-                <x-admin.button :href="route('admin.offices.index')" variant="white">Cancel</x-admin.button>
+                <x-admin.actions.button variant="green" type="submit">Create Office</x-admin.actions.button>
+                <x-admin.actions.button :href="route('admin.offices.index')" variant="white">Cancel</x-admin.actions.button>
             </div>
 
         </form>

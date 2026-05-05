@@ -19,9 +19,25 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            if (! Auth::user()->is_active) {
+                Auth::logout();
+
+                return back()
+                    ->with('error', 'Your account is currently deactivated. Please contact an administrator.')
+                    ->onlyInput('email');
+            }
 
             $request->session()->regenerate();
-            return redirect()->route('home')->with('success','Logged In');
+
+            if (Auth::user()->role?->name === 'Administrator') {
+                return redirect()
+                    ->route('admin.index')
+                    ->with('success', 'Logged In');
+            }
+            
+            return redirect()
+                ->route('home')
+                ->with('success','Logged In');
         }
 
         return back()

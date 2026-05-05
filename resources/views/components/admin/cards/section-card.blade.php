@@ -3,7 +3,7 @@
     'description' => null,
 ])
 
-<section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+<section class="card p-5">
     <div class="mb-4">
         <h3 class="text-base font-semibold text-slate-900">{{ $title }}</h3>
         @if ($description)

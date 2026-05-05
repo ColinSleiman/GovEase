@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('office_id')->nullable()->constrained('offices')->onDelete('cascade');          
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('cascade');
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

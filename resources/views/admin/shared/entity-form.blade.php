@@ -1,20 +1,20 @@
-<div class="space-y-6">
-    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+<div class="admin-page">
+    <section class="card-padded">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">{{ $pageTitle }}</h1>
-                <p class="mt-2 max-w-3xl text-sm text-slate-600">
+                <h1 class="admin-page-title">{{ $pageTitle }}</h1>
+                <p class="admin-page-subtitle max-w-3xl">
                     {{ $pageDescription }}
                 </p>
             </div>
 
-            <x-admin.button :href="route('admin.' . $entity['entity'] . '.index')" variant="white">
+            <x-admin.actions.button :href="route('admin.' . $entity['entity'] . '.index')" variant="white">
                 Back to {{ $entity['plural'] }}
-            </x-admin.button>
+            </x-admin.actions.button>
         </div>
     </section>
 
-    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section class="card-padded">
         <form action="{{ $formAction }}" method="POST" class="space-y-6">
             @csrf
 
@@ -22,9 +22,9 @@
                 @method($formMethod)
             @endif
 
-            <div class="grid gap-5 md:grid-cols-2">
+            <div class="admin-form-grid">
                 @foreach ($fields as $field)
-                    <x-admin.form-field
+                    <x-admin.forms.form-field
                         :field="$field"
                         :value="$values[$field['name']] ?? null"
                     />
@@ -32,13 +32,13 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
-                <x-admin.button variant="green" type="submit">
+                <x-admin.actions.button variant="green" type="submit">
                     {{ $submitLabel }}
-                </x-admin.button>
+                </x-admin.actions.button>
 
-                <x-admin.button :href="route('admin.' . $entity['entity'] . '.index')" variant="white">
+                <x-admin.actions.button :href="route('admin.' . $entity['entity'] . '.index')" variant="white">
                     Cancel
-                </x-admin.button>
+                </x-admin.actions.button>
             </div>
         </form>
     </section>

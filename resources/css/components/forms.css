@@ -1,0 +1,25 @@
+@layer components {
+    .form-label {
+        @apply mb-2 block text-sm font-medium text-slate-700;
+    }
+
+    .form-control-base {
+        @apply block w-full rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200;
+    }
+
+    .form-checkbox-card {
+        @apply flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3;
+    }
+
+    .form-checkbox-input {
+        @apply mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500;
+    }
+
+    .form-help-text {
+        @apply mt-2 text-xs text-slate-500;
+    }
+
+    .form-error-text {
+        @apply mt-2 text-sm text-red-600;
+    }
+}

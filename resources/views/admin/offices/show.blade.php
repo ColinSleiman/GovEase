@@ -10,8 +10,8 @@
                 <p class="mt-2 text-sm text-slate-600">Review the selected office record.</p>
             </div>
             <div class="flex gap-3">
-                <x-admin.button :href="route('admin.offices.edit', $row->id)" variant="blue">Edit Office</x-admin.button>
-                <x-admin.button :href="route('admin.offices.index')" variant="white">Back to Offices</x-admin.button>
+                <x-admin.actions.button :href="route('admin.offices.edit', $row->id)" variant="blue">Edit Office</x-admin.actions.button>
+                <x-admin.actions.button :href="route('admin.offices.index')" variant="white">Back to Offices</x-admin.actions.button>
             </div>
         </section>
 

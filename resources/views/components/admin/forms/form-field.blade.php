@@ -17,14 +17,14 @@
 
 <div class="{{ $columnSpan }}">
     @if ($inputType === 'checkbox')
-        <label for="{{ $id }}" class="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+        <label for="{{ $id }}" class="form-checkbox-card">
             <input
                 id="{{ $id }}"
                 name="{{ $name }}"
                 type="checkbox"
                 value="1"
                 @checked($isChecked)
-                class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                class="form-checkbox-input"
             >
             <span>
                 <span class="block text-sm font-medium text-slate-900">{{ $label }}</span>
@@ -34,7 +34,7 @@
             </span>
         </label>
     @else
-        <label for="{{ $id }}" class="mb-2 block text-sm font-medium text-slate-700">
+        <label for="{{ $id }}" class="form-label">
             {{ $label }}
             @if ($field['required'])
                 <span class="text-red-500">*</span>
@@ -48,18 +48,18 @@
                 rows="4"
                 placeholder="{{ $placeholder }}"
                 @required($field['required'])
-                class="block w-full rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                class="form-control-base"
             >{{ old($name, $value) }}</textarea>
         @elseif ($inputType === 'select')
             <select
                 id="{{ $id }}"
                 name="{{ $name }}"
                 @required($field['required'])
-                class="block w-full rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                class="form-control-base"
             >
                 <option value="">{{ $placeholder }}</option>
                 @foreach ($options as $option)
-                    <option value="{{ $option['value'] }}" @selected((string) old($name, $value) === (string) $option['value']>
+                    <option value="{{ $option['value'] }}" @selected((string) old($name, $value) === (string) $option['value'])>
                         {{ $option['label'] }}
                     </option>
                 @endforeach
@@ -73,16 +73,16 @@
                 placeholder="{{ $placeholder }}"
                 step="{{ $field['step'] ?? null }}"
                 @required($field['required'])
-                class="block w-full rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                class="form-control-base"
             >
         @endif
 
         @if ($help)
-            <p class="mt-2 text-xs text-slate-500">{{ $help }}</p>
+            <p class="form-help-text">{{ $help }}</p>
         @endif
     @endif
 
     @error($name)
-        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+        <p class="form-error-text">{{ $message }}</p>
     @enderror
 </div>

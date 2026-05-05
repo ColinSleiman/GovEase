@@ -19,123 +19,9 @@
         <link rel="stylesheet" href="{{ asset('assets/css/animated.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
         
-        <style>
-            .field-error {
-                color: #dc3545;
-                font-size: 12px;
-                margin-top: 5px;
-                font-weight: 500;
-            }
-            
-            .alert {
-                padding: 10px 15px;
-                margin-bottom: 15px;
-                border-radius: 4px;
-            }
-            
-            .alert-success {
-                background-color: #d4edda;
-                border: 1px solid #c3e6cb;
-                color: #155724;
-            }
-            
-            .alert-danger {
-                background-color: #f8d7da;
-                border: 1px solid #f5c6cb;
-                color: #721c24;
-            }
-            
-            .user-indicator {
-                position: relative;
-                display: inline-block;
-            }
-            
-            .user-dropdown {
-                position: absolute;
-                top: 100%;
-                right: 0;
-                background: white;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                min-width: 150px;
-                z-index: 1000;
-                display: none;
-            }
-            
-            .user-dropdown a {
-                display: block;
-                padding: 8px 12px;
-                color: #333;
-                text-decoration: none;
-                font-size: 14px;
-            }
-            
-            .user-dropdown a:hover {
-                background-color: #f8f9fa;
-                color: #007bff;
-            }
-            
-            #registerBtn:disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-            }
-            
-            input:invalid {
-                border-color: #dc3545;
-            }
-            
-            input:valid {
-                border-color: #28a745;
-            }
-
-            .register-grid {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 12px 16px;
-            }
-
-            .register-grid .form-field label,
-            .register-grid .form-field input {
-                display: block;
-                width: 100%;
-            }
-
-            .register-grid .form-field small {
-                display: block;
-                margin-top: 4px;
-            }
-
-            @media (max-width: 576px) {
-                .register-grid {
-                    grid-template-columns: 1fr;
-                }
-            }
-        </style>
-
     </head>
 
     <body>
-        <!-- ***** Verification Alert ***** -->
-        @auth
-            @if (!Auth::user()->verified)
-                <div class="verification-alert" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 0;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <i class="fa fa-exclamation-triangle"></i>
-                                <strong>Account Verification Required!</strong> 
-                                Please verify your account to access all features.
-                                <a href="{{ route('otp.show') }}" class="btn btn-sm" style="background: white; color: #ff6b6b; margin-left: 15px; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold;">
-                                    <i class="fa fa-shield-alt"></i> Verify Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        @endauth
-        
         <!-- ***** Preloader Start ***** -->
         <div id="js-preloader" class="js-preloader">
             <div class="preloader-inner">
@@ -169,23 +55,28 @@
                             <li class="scroll-to-section"><a href="#about">Platform</a></li>
                             <li class="scroll-to-section"><a href="#pricing">Solutions</a></li>
                             <li class="scroll-to-section"><a href="#newsletter">Updates</a></li>
-                            <li class="user-indicator">
+                            <li>
                                 @guest
-                                    <div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Access Portal</a></div>
+                                    <div class="gradient-button">
+                                        <a href="{{ route('portal.access') }}">
+                                            <i class="fa fa-sign-in-alt"></i> Access Portal
+                                        </a>
+                                    </div>
                                 @else
-                                    <div class="gradient-button" style="position: relative;">
-                                        <a href="#" id="userMenu"><i class="fa fa-user"></i> {{ Auth::user()->full_name }}</a>
-                                        <div class="user-dropdown" id="userDropdown">
-                                            <a href="#">Profile</a>
-                                            <a href="#">Settings</a>
-                                            <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
-                                            <form action="{{ route('logout') }}" method="POST">
-                                                @csrf
-                                                <button type="submit" style="background: none; border: none; color: #dc3545; padding: 8px 12px; width: 100%; text-align: left; cursor: pointer; font-size: 14px;">
-                                                    <i class="fa fa-sign-out-alt"></i> Logout
-                                                </button>
-                                            </form>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="gradient-button">
+                                            <a href="javascript:void(0)">
+                                                <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
+                                            </a>
                                         </div>
+                                        <div class="gradient-button">
+                                            <a href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('navbar-logout-form').submit();">
+                                                <i class="fa fa-sign-out-alt"></i> Logout
+                                            </a>
+                                        </div>
+                                        <form id="navbar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
                                     </div>
                                 @endguest
                             </li> 
@@ -201,142 +92,6 @@
         </header>
         <!-- ***** Header Area End ***** -->
         
-        <!-- ***** Modal Start ***** -->
-        <div id="modal" class="popupContainer" style="display:none;">
-            <div class="popupHeader">
-                <span class="header_title">Portal Access</span>
-                <span class="modal_close"><i class="fa fa-times"></i></span>
-            </div>
-
-            <section class="popupBody">
-                <!-- Social Login -->
-                <div class="social_login">
-                    <div class="">
-                        <a href="{{ route('auth.google.redirect') }}" class="social_box google">
-                            <span class="icon"><i class="fab fa-google-plus"></i></span>
-                            <span class="icon_title">Continue with Google</span>
-                        </a>
-                    </div>
-
-                    <div class="centeredText">
-                        <span>Or sign in with your email</span>
-                    </div>
-
-                    <div class="action_btns">
-                        <div class="one_half"><a href="#" id="login_form" class="btn">Sign In</a></div>
-                        <div class="one_half last"><a href="#" id="register_form" class="btn">Create Account</a></div>
-                    </div>
-                </div>
-
-                <!-- Username & Password Login form -->
-                <div class="user_login">
-                    <form action="{{ route('login') }}" method="POST">
-                        @csrf
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-                        
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required />
-                        <br />
-
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required />
-                        <br />
-
-                        <div class="checkbox">
-                            <input id="remember" type="checkbox" name="remember" />
-                            <label for="remember">Keep me signed in on this device</label>
-                        </div>
-
-                        <div class="action_btns">
-                            <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                            <div class="one_half last"><button type="submit" class="btn btn_red">Sign In</button></div>
-                        </div>
-                    </form>
-
-                    <a href="#" class="forgot_password">Forgot your password?</a>
-                </div>
-
-                <!-- Register Form -->
-                <div class="user_register">
-                    <form action="{{ route('register') }}" method="POST" id="registerForm">
-                        @csrf
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        
-                        <div class="register-grid">
-                            <div class="form-field">
-                                <label for="firstName">First Name *</label>
-                                <input type="text" id="firstName" name="firstName" value="{{ old('firstName') }}" required minlength="2" maxlength="255" />
-                                <div class="field-error" id="firstName-error"></div>
-                            </div>
-
-                            <div class="form-field">
-                                <label for="lastName">Last Name *</label>
-                                <input type="text" id="lastName" name="lastName" value="{{ old('lastName') }}" required minlength="2" maxlength="255" />
-                                <div class="field-error" id="lastName-error"></div>
-                            </div>
-
-                            <div class="form-field">
-                                <label for="email">Email Address *</label>
-                                <input type="email" id="email" name="email" value="{{ old('email') }}" required maxlength="255" />
-                                <div class="field-error" id="email-error"></div>
-                            </div>
-
-                            <div class="form-field">
-                                <label for="password">Password *</label>
-                                <input type="password" id="password" name="password" required minlength="8" />
-                                <div class="field-error" id="password-error"></div>
-                                <small style="color: #666; font-size: 12px;">Minimum 8 characters</small>
-                            </div>
-
-                            <div class="form-field">
-                                <label for="password_confirmation">Confirm Password *</label>
-                                <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" />
-                                <div class="field-error" id="password_confirmation-error"></div>
-                            </div>
-                        </div>
-                        <br />
-
-                        <div class="action_btns">
-                            <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-                            <div class="one_half last"><button type="submit" class="btn btn_red">Register</button></div>
-                        </div>
-                    </form>
-                </div>
-            </section>
-        </div>
-        <!-- ***** Modal End ***** -->
-
         <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
             <div class="container">
                 <div class="row">
@@ -348,14 +103,6 @@
                                         <div class="col-lg-12">
                                             <h2>Digitize public services with clarity, speed, and trust</h2>
                                             <p>GovEase is a centralized e-services platform that helps citizens, government offices, and administrators manage requests securely, reduce delays, and deliver a more transparent service experience.</p>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="white-button first-button scroll-to-section">
-                                            <a href="#services">Explore Services <i class="fab fa-apple"></i></a>
-                                            </div>
-                                            <div class="white-button scroll-to-section">
-                                            <a href="#about">See How It Works <i class="fab fa-google-play"></i></a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -465,10 +212,8 @@
                     </div>
                     <div class="col-lg-12">
                     <p>The result is a more responsive service model that improves operational efficiency while giving citizens a clearer, more convenient experience.</p>
-                    <div class="gradient-button">
-                        <a href="#">Request a Platform Demo</a>
-                    </div>
-                    <span>*Designed for public service transformation</span>
+                    
+                    <span></span>
                     </div>
                 </div>
                 </div>
@@ -875,7 +620,6 @@
                 <div class="col-lg-12">
                 <div class="copyright-text">
                     <p>Copyright © 2026 GovEase. All Rights Reserved.
-                <br>Built for efficient and citizen-focused public services.</p>
                 </div>
                 </div>
             </div>
@@ -888,25 +632,7 @@
         <script src="{{ asset('assets/js/owl-carousel.js') }}"></script>
         <script src="{{ asset('assets/js/animation.js') }}"></script>
         <script src="{{ asset('assets/js/imagesloaded.js') }}"></script>
-        <script src="{{ asset('assets/js/popup.js') }}"></script>
         <script src="{{ asset('assets/js/custom.js') }}"></script>
-        
-        <!-- User Dropdown Toggle -->
-        <script>
-        $(document).ready(function() {
-            $('#userMenu').click(function(e) {
-                e.preventDefault();
-                $('#userDropdown').toggle();
-            });
-            
-            // Close dropdown when clicking outside
-            $(document).click(function(e) {
-                if (!$(e.target).closest('.user-indicator').length) {
-                    $('#userDropdown').hide();
-                }
-            });
-        });
-        </script>
     </body>
 
 </html>

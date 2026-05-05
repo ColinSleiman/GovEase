@@ -7,6 +7,7 @@ use App\Models\Office;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -57,5 +58,22 @@ class UserController extends Controller
         $row = User::findOrFail($id);
         $row->delete();
         return redirect()->route('admin.users.index');
+    }
+
+    public function toggleStatus(User $user)
+    {
+        if (Auth::id() === $user->id && $user->is_active) {
+            return back()->with('error', 'You cannot deactivate your own account.');
+        }
+
+        $user->update([
+            'is_active' => ! $user->is_active,
+        ]);
+
+        $message = $user->is_active
+            ? 'User account activated successfully.'
+            : 'User account deactivated successfully.';
+
+        return back()->with('success', $message);
     }
 }

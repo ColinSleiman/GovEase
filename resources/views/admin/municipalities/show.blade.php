@@ -21,8 +21,8 @@
                 <p class="mt-2 text-sm text-slate-600">Review the selected municipality record.</p>
             </div>
             <div class="flex gap-3">
-                <x-admin.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue">Edit Municipality</x-admin.button>
-                <x-admin.button :href="route('admin.municipalities.index')" variant="white">Back to Municipalities</x-admin.button>
+                <x-admin.actions.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue">Edit Municipality</x-admin.actions.button>
+                <x-admin.actions.button :href="route('admin.municipalities.index')" variant="white">Back to Municipalities</x-admin.actions.button>
             </div>
         </section>
 

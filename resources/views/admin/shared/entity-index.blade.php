@@ -1,22 +1,22 @@
-<div class="space-y-6">
+<div class="admin-page">
     @if (session('status'))
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
             {{ session('status') }}
         </div>
     @endif
 
-    <section class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-start sm:justify-between">
+    <section class="admin-page-header">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">{{ $entity['plural'] }}</h1>
-            <p class="mt-2 max-w-3xl text-sm text-slate-600">{{ $entity['description'] }}</p>
+            <h1 class="admin-page-title">{{ $entity['plural'] }}</h1>
+            <p class="admin-page-subtitle max-w-3xl">{{ $entity['description'] }}</p>
         </div>
 
-        <x-admin.button :href="route('admin.' . $entity['entity'] . '.create')" variant="green">
+        <x-admin.actions.button :href="route('admin.' . $entity['entity'] . '.create')" variant="green">
             Create New {{ $entity['singular'] }}
-        </x-admin.button>
+        </x-admin.actions.button>
     </section>
 
-    <x-admin.data-table
+    <x-admin.tables.data-table
         :columns="$columns"
         :rows="$rows"
         :route-prefix="'admin.' . $entity['entity']"

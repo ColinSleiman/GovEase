@@ -3,75 +3,75 @@
 @section('title', 'Municipalities | GovEase Admin')
 
 @section('content')
-    <div class="space-y-6">
-        <section class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div class="admin-page">
+        <section class="admin-page-header">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Municipalities</h1>
-                <p class="mt-2 text-sm text-slate-600">Manage municipality records with simple CRUD actions.</p>
+                <h1 class="admin-page-title">Municipalities</h1>
+                <p class="admin-page-subtitle">Manage municipality records with simple CRUD actions.</p>
             </div>
-            <x-admin.button :href="route('admin.municipalities.create')" variant="green">Create New Municipality</x-admin.button>
+            <x-admin.actions.button :href="route('admin.municipalities.create')" variant="green">Create New Municipality</x-admin.actions.button>
         </section>
 
-        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-50">
+        <div class="admin-table-wrap">
+            <div class="admin-table-scroll">
+                <table class="admin-table">
+                    <thead class="admin-table-head">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">ID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Region</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Latitude</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Longitude</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Address</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Google Maps Location</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Working Hours</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Contact Info</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Created At</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Updated At</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">Name</th>
+                            <th class="admin-table-th">Region</th>
+                            <th class="admin-table-th">Latitude</th>
+                            <th class="admin-table-th">Longitude</th>
+                            <th class="admin-table-th">Address</th>
+                            <th class="admin-table-th">Google Maps Location</th>
+                            <th class="admin-table-th">Working Hours</th>
+                            <th class="admin-table-th">Contact Info</th>
+                            <th class="admin-table-th">Created At</th>
+                            <th class="admin-table-th">Updated At</th>
+                            <th class="admin-table-th-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 bg-white">
+                    <tbody class="admin-table-body">
                         @forelse ($data as $municipality)
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->id }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->name }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->region }}</td>
-                                <td class="max-w-[140px] truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->latitude }}">
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $municipality->id }}</td>
+                                <td class="admin-table-td">{{ $municipality->name }}</td>
+                                <td class="admin-table-td">{{ $municipality->region }}</td>
+                                <td class="admin-table-td max-w-[140px] truncate" title="{{ $municipality->latitude }}">
                                     {{ $municipality->latitude ?? 'N/A' }}
                                 </td>
-                                <td class="max-w-[140px] truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->longitude }}">
+                                <td class="admin-table-td max-w-[140px] truncate" title="{{ $municipality->longitude }}">
                                     {{ $municipality->longitude ?? 'N/A' }}
                                 </td>
-                                <td class="max-w-xs truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->address }}">
+                                <td class="admin-table-td max-w-xs truncate" title="{{ $municipality->address }}">
                                     {{ $municipality->address ?? 'N/A' }}
                                 </td>
-                                <td class="max-w-xs truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->google_maps_location }}">
+                                <td class="admin-table-td max-w-xs truncate" title="{{ $municipality->google_maps_location }}">
                                     {{ $municipality->google_maps_location ?? 'N/A' }}
                                 </td>
-                                <td class="max-w-[180px] truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->working_hours }}">
+                                <td class="admin-table-td max-w-[180px] truncate" title="{{ $municipality->working_hours }}">
                                     {{ $municipality->working_hours ?? 'N/A' }}
                                 </td>
-                                <td class="max-w-[180px] truncate px-4 py-3 text-sm text-slate-700" title="{{ $municipality->contact_info }}">
+                                <td class="admin-table-td max-w-[180px] truncate" title="{{ $municipality->contact_info }}">
                                     {{ $municipality->contact_info ?? 'N/A' }}
                                 </td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->created_at }}</td>
-                                <td class="px-4 py-3 text-sm text-slate-700">{{ $municipality->updated_at }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex justify-end gap-2">
-                                        <x-admin.button :href="route('admin.municipalities.show', $municipality->id)" variant="white" class="px-3 py-1.5 text-xs">View</x-admin.button>
-                                        <x-admin.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="px-3 py-1.5 text-xs">Edit</x-admin.button>
+                                <td class="admin-table-td">{{ $municipality->created_at }}</td>
+                                <td class="admin-table-td">{{ $municipality->updated_at }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.municipalities.show', $municipality->id)" variant="white" class="btn-xs">View</x-admin.actions.button>
+                                        <x-admin.actions.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
                                         <form action="{{ route('admin.municipalities.destroy', $municipality->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <x-admin.button variant="red" type="submit" class="px-3 py-1.5 text-xs">Delete</x-admin.button>
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="px-4 py-6 text-center text-sm text-slate-500">No municipalities found.</td>
+                                <td colspan="12" class="admin-empty">No municipalities found.</td>
                             </tr>
                         @endforelse
                     </tbody>

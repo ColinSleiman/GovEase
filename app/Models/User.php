@@ -22,6 +22,7 @@ class User extends Authenticatable
         'office_id',
         'role_id',
         'verified',
+        'is_active',
     ];
 
     protected $hidden = [
@@ -37,6 +38,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_authentication' => 'boolean',
             'verified' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 
