@@ -32,11 +32,11 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'amount',
-            'payment_method',
-            'status',
-            'transaction_reference',
-            'request_id',
+            'amount' => ['required', 'numeric', 'min:0'],
+            'payment_method' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'string', 'max:255'],
+            'transaction_reference' => ['required', 'string', 'max:255', 'unique:payments,transaction_reference'],
+            'request_id' => ['required', 'exists:requests,id'],
         ]);
 
         $payment = Payment::create($validated);
@@ -60,11 +60,11 @@ class PaymentController extends Controller
     public function update(Request $request, Payment $payment)
     {
         $validated = $request->validate([
-            'amount',
-            'payment_method',
-            'status',
-            'transaction_reference',
-            'request_id',
+            'amount' => ['sometimes', 'required', 'numeric', 'min:0'],
+            'payment_method' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'transaction_reference' => ['sometimes', 'required', 'string', 'max:255', 'unique:payments,transaction_reference,' . $payment->id],
+            'request_id' => ['sometimes', 'required', 'exists:requests,id'],
         ]);
 
         $payment->update($validated);

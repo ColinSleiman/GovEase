@@ -16,8 +16,15 @@ return new class extends Migration
 
             $table->string('qr_code')->nullable();
             $table->string('tracking_number');
+            
 
             // fk
+            $table->foreignId("user_id")
+                ->nullable()
+                ->references("id")
+                ->on("users")
+                ->nullOnDelete();
+                
             $table->foreignId("status_id")
                 ->references("id")
                 ->on("statuses")
@@ -27,6 +34,13 @@ return new class extends Migration
                 ->references("id")
                 ->on("services")
                 ->onDelete("cascade");
+
+            $table->text('status_note')->nullable();
+            $table->foreignId("reviewed_by")
+                ->nullable()
+                ->references("id")
+                ->on("users")
+                ->nullOnDelete();
 
             /*
             $table->foreignId("appointment_id")

@@ -32,9 +32,9 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'file_path',
-            'document_type',
-            'uploaded_by',
+            'file_path' => ['required', 'string', 'max:255'],
+            'document_type' => ['required', 'string', 'max:255'],
+            'uploaded_by' => ['required', 'exists:users,id'],
         ]);
 
         $document = Document::create($validated);
@@ -58,9 +58,9 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $validated = $request->validate([
-            'file_path',
-            'document_type',
-            'uploaded_by',
+            'file_path' => ['sometimes', 'required', 'string', 'max:255'],
+            'document_type' => ['sometimes', 'required', 'string', 'max:255'],
+            'uploaded_by' => ['sometimes', 'required', 'exists:users,id'],
         ]);
 
         $document->update($validated);

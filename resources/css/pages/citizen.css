@@ -1,0 +1,13 @@
+@layer components {
+    .citizen-page {
+        @apply space-y-6;
+    }
+
+    .citizen-page-title {
+        @apply text-2xl font-bold text-slate-900;
+    }
+
+    .citizen-page-subtitle {
+        @apply mt-2 text-sm text-slate-600;
+    }
+}

@@ -26,12 +26,12 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
-            'description',
-            'price',
-            'duration',
-            'office_id' => 'required|exists:offices,id',
-            'service_category_id' => 'required|exists:service_categories,id',
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'duration' => ['required', 'integer', 'min:1'],
+            'office_id' => ['required', 'exists:offices,id'],
+            'service_category_id' => ['required', 'exists:service_categories,id'],
         ]);
 
         // Create service
@@ -56,12 +56,12 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $validated = $request->validate([
-            'name',
-            'description',
-            'price',
-            'duration',
-            'office_id' => 'sometimes|required|exists:offices,id',
-            'service_category_id' => 'sometimes|required|exists:service_categories,id',
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'price' => ['sometimes', 'required', 'numeric', 'min:0'],
+            'duration' => ['sometimes', 'required', 'integer', 'min:1'],
+            'office_id' => ['sometimes', 'required', 'exists:offices,id'],
+            'service_category_id' => ['sometimes', 'required', 'exists:service_categories,id'],
         ]);
 
         $service->update($validated);

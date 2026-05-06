@@ -34,6 +34,12 @@ class LoginController extends Controller
                     ->route('admin.index')
                     ->with('success', 'Logged In');
             }
+
+            if (Auth::user()->role?->name === 'Citizen') {
+                return redirect()
+                    ->route('citizen.dashboard')
+                    ->with('success', 'Logged In');
+            }
             
             return redirect()
                 ->route('home')

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckAuth;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'check.auth' => CheckAuth::class,
             'check.admin' => CheckAdmin::class,
+            'check.role' => RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

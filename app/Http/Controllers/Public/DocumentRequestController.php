@@ -32,8 +32,8 @@ class DocumentRequestController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'request_id',
-            'document_id',
+            'request_id' => ['required', 'exists:requests,id'],
+            'document_id' => ['required', 'exists:documents,id'],
         ]);
 
         $documentRequest = DocumentRequest::create($validated);
@@ -57,8 +57,8 @@ class DocumentRequestController extends Controller
     public function update(Request $request, DocumentRequest $documentRequest)
     {
         $validated = $request->validate([
-            'request_id',
-            'document_id',
+            'request_id' => ['sometimes', 'required', 'exists:requests,id'],
+            'document_id' => ['sometimes', 'required', 'exists:documents,id'],
         ]);
 
         $documentRequest->update($validated);

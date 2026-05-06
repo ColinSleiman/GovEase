@@ -10,9 +10,13 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
+        Role::query()
+            ->where('name', 'Office Staff')
+            ->update(['name' => 'OfficeStaff']);
+
         $roles = [
             ['name' => 'Citizen'],
-            ['name' => 'Office Staff'],
+            ['name' => 'OfficeStaff'],
             ['name' => 'Administrator'],
         ];
 

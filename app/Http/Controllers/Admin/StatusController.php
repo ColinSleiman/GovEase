@@ -32,7 +32,7 @@ class StatusController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name',
+            'name' => ['required', 'string', 'max:255', 'unique:statuses,name'],
         ]);
 
         $status = Status::create($validated);
@@ -56,7 +56,7 @@ class StatusController extends Controller
     public function update(Request $request, Status $status)
     {
         $validated = $request->validate([
-            'name',
+            'name' => ['required', 'string', 'max:255', 'unique:statuses,name,' . $status->id],
         ]);
 
         $status->update($validated);
