@@ -22,9 +22,9 @@ class Request extends Model
         return [
             'pending' => ['in review'],
             'in review' => ['missing documents', 'approved', 'rejected'],
-            'missing documents' => ['in review'],
+            'missing documents' => ['in review', 'rejected'],
             'approved' => ['completed'],
-            'rejected' => ['completed'],
+            'rejected' => [],
             'completed' => [],
         ];
     }

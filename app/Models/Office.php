@@ -29,4 +29,19 @@ class Office extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function requests()
+    {
+        return $this->hasManyThrough(Request::class, Service::class, 'office_id', 'service_id');
+    }
+
+    public function serviceCategories()
+    {
+        return $this->hasMany(ServiceCategory::class);
+    }
 }

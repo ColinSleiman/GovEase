@@ -40,6 +40,12 @@ class LoginController extends Controller
                     ->route('citizen.dashboard')
                     ->with('success', 'Logged In');
             }
+
+            if (Auth::user()->role?->name === 'OfficeStaff') {
+                return redirect()
+                    ->route('office.dashboard')
+                    ->with('success', 'Logged In');
+            }
             
             return redirect()
                 ->route('home')

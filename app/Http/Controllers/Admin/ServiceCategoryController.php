@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 
 class ServiceCategoryController extends Controller
 {
+    // Admin service category controller currently serves JSON API responses.
     // Display all service categories
     public function index()
     {

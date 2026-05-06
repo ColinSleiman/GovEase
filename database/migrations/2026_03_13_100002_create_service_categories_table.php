@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('service_categories', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
+
+            // nullable office reference; FK omitted here due migration order
+            $table->unsignedBigInteger('office_id')->nullable();
 
             $table->timestamps();
         });

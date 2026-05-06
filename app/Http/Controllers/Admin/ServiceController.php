@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 
 class ServiceController extends Controller
 {
+    // Admin service controller currently serves JSON API responses.
     // Display a listing of the resource.
     public function index()
     {

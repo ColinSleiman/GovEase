@@ -83,12 +83,39 @@
 </div>
 
 <script>
+    const categories = @json($categoriesForJs);
     const services = @json($servicesForJs);
 
+    const oldCategoryId = "{{ old('service_category_id') }}";
     const oldServiceId = "{{ old('service_id') }}";
     const officeInput = document.getElementById('office_id');
     const categoryInput = document.getElementById('service_category_id');
     const serviceInput = document.getElementById('service_id');
+
+    function refreshCategories() {
+        const officeId = officeInput.value;
+        let filtered = categories;
+
+        if (officeId) {
+            filtered = filtered.filter(item => String(item.office_id) === String(officeId));
+        }
+
+        categoryInput.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = filtered.length ? 'Select category' : 'No category available';
+        categoryInput.appendChild(defaultOption);
+
+        filtered.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.name;
+            if (String(item.id) === String(oldCategoryId)) {
+                option.selected = true;
+            }
+            categoryInput.appendChild(option);
+        });
+    }
 
     function refreshServices() {
         const officeId = officeInput.value;
@@ -119,8 +146,12 @@
         });
     }
 
-    officeInput.addEventListener('change', refreshServices);
+    officeInput.addEventListener('change', () => {
+        refreshCategories();
+        refreshServices();
+    });
     categoryInput.addEventListener('change', refreshServices);
+    refreshCategories();
     refreshServices();
 </script>
 @endsection

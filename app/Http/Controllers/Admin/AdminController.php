@@ -10,6 +10,7 @@ use App\Models\User;
 class AdminController extends Controller
 {
     public function index(){ return redirect()->route('admin.dashboard'); }
+    
     public function dashboard()
     {
         $offices = Office::latest()->take(5)->get();
@@ -18,6 +19,7 @@ class AdminController extends Controller
 
         return view('admin.dashboard.index', compact('offices', 'municipalities', 'users'));
     }
+
     public function requests(){ return redirect()->route('admin.dashboard'); }
     public function servicesMonitor(){ return redirect()->route('admin.dashboard'); }
     public function reportsOfficeRequests(){ return redirect()->route('admin.dashboard');}
