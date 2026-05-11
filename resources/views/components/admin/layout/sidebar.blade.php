@@ -58,5 +58,15 @@
                 Revenue Reports
             </a>
         </section>
+
+        <section class="admin-sidebar-group">
+            <h2 class="admin-sidebar-group-title">Stripe Testing</h2>
+            <a href="{{ route('admin.stripe.test') }}" class="admin-sidebar-link {{ request()->routeIs('admin.stripe.test') ? 'active' : '' }}">
+                Payment Test Page
+            </a>
+            <a href="{{ route('admin.stripe.success') }}" class="admin-sidebar-link {{ request()->routeIs('admin.stripe.success') ? 'active' : '' }}">
+                Success Page
+            </a>
+        </section>
     </nav>
 </div>

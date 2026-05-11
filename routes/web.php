@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\OTPController;
 
+
 // Admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\MunicipalityController;
@@ -22,6 +23,9 @@ use App\Http\Controllers\Office\OfficeDashboardController;
 use App\Http\Controllers\Office\OfficeRequestController;
 use App\Http\Controllers\Office\OfficeServiceCategoryController;
 use App\Http\Controllers\Office\OfficeServiceController;
+
+//Payment
+use App\Http\Controllers\Payment\StripeController;
 
 // Public
 use App\Http\Controllers\Public\DocumentController;
@@ -53,6 +57,8 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    Route::post('/stripe-test/create-intent', [AdminController::class, 'createIntent'])->name('stripe.create-intent');
+
     Route::resource('offices', OfficeController::class);
     Route::resource('municipalities', MunicipalityController::class);
     Route::resource('users', UserController::class);
@@ -71,6 +77,9 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
     Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications.index');
     Route::get('/logs', [AdminController::class, 'logs'])->name('logs.index');
     Route::get('/help', [AdminController::class, 'help'])->name('help.index');
+    Route::get('/stripe-test', [AdminController::class, 'stripeTest'])->name('stripe.test');
+    Route::get('/stripe-test/success', [AdminController::class, 'stripeSuccess'])->name('stripe.success');
+    Route::post('/stripe-test/create-intent', [AdminController::class, 'createIntent'])->name('stripe.create-intent');
 });
 
 
@@ -109,3 +118,5 @@ Route::middleware(['check.auth', 'check.role:Citizen,OfficeStaff,Administrator']
     Route::resource('document-requests', DocumentRequestController::class);
     Route::resource('payments', PaymentController::class);
 });
+
+Route::post("stripe", [StripeController::class, "store"])->name("stripe.payment");
