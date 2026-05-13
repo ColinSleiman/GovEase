@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\OTPController;
+use App\Http\Controllers\Citizen\DashboardController as CitizenDashboardController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminController;
@@ -29,6 +30,8 @@ use App\Http\Controllers\Public\ReviewController;
 
 
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
+
+Route::get('/citizen/dashboard', CitizenDashboardController::class)->name('citizen.dashboard');
 
 
 // auth routes
