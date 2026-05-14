@@ -20,6 +20,9 @@
 /storage/*.key
 /storage/pail
 /vendor
+/.composer-home
+/composer-setup.php
+/composer.phar
 Homestead.json
 Homestead.yaml
 Thumbs.db

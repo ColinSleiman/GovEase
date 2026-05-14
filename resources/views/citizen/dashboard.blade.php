@@ -177,7 +177,10 @@
     <header class="topbar">
         <div class="container d-flex align-items-center justify-content-between gap-3">
             <a class="brand-mark" href="{{ route('home') }}">GovEase</a>
-            <a class="btn btn-sm btn-outline-primary" href="{{ route('home') }}">Home</a>
+            <div class="d-flex gap-2">
+                <a class="btn btn-sm btn-primary" href="{{ route('citizen.documents.index') }}">Request Documents</a>
+                <a class="btn btn-sm btn-outline-primary" href="{{ route('home') }}">Home</a>
+            </div>
         </div>
     </header>
 

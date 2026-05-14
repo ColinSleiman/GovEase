@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\OTPController;
 use App\Http\Controllers\Citizen\DashboardController as CitizenDashboardController;
+use App\Http\Controllers\Citizen\DocumentPaymentController;
 
 // Admin
 use App\Http\Controllers\Admin\AdminController;
@@ -33,6 +34,12 @@ use App\Http\Controllers\Public\ReviewController;
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
 
 Route::get('/citizen/dashboard', CitizenDashboardController::class)->name('citizen.dashboard');
+Route::get('/citizen/documents', [DocumentPaymentController::class, 'services'])->name('citizen.documents.index');
+Route::post('/citizen/documents/{service}/requests', [DocumentPaymentController::class, 'storeRequest'])->name('citizen.documents.request');
+Route::get('/citizen/requests/{request}', [DocumentPaymentController::class, 'show'])->name('citizen.requests.show');
+Route::get('/citizen/requests/{request}/payment', [DocumentPaymentController::class, 'payment'])->name('citizen.requests.payment');
+Route::post('/citizen/requests/{request}/payment-intent', [DocumentPaymentController::class, 'createIntent'])->name('citizen.requests.payment-intent');
+Route::post('/citizen/requests/{request}/confirm-payment', [DocumentPaymentController::class, 'confirmPayment'])->name('citizen.requests.confirm-payment');
 
 
 // auth routes

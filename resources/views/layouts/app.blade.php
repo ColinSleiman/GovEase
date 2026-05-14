@@ -154,6 +154,7 @@
                                         <a href="#" id="userMenu"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
                                         <div class="user-dropdown" id="userDropdown">
                                             <a href="{{ route('citizen.dashboard') }}">Citizen Dashboard</a>
+                                            <a href="{{ route('citizen.documents.index') }}">Request Documents</a>
                                             <a href="#">Profile</a>
                                             <a href="#">Settings</a>
                                             <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
