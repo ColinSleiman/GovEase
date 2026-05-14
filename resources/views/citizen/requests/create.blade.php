@@ -33,14 +33,33 @@
             @csrf
 
             <div>
+                <label for="municipality_id" class="mb-1 block text-sm font-medium text-slate-700">Municipality</label>
+                <select class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="municipality_id" name="municipality_id">
+                    <option value="">Select municipality from map or dropdown</option>
+                    @foreach ($municipalities as $municipality)
+                        <option value="{{ $municipality->id }}">
+                            {{ $municipality->name }}{{ $municipality->region ? ' (' . $municipality->region . ')' : '' }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="mb-1 block text-sm font-medium text-slate-700">Municipality Map</label>
+                @if ($apiKey)
+                    <div id="municipality-map" class="h-80 w-full rounded-lg border border-slate-300"></div>
+                    <p class="mt-1 text-xs text-slate-500">Click a marker to select a municipality. The office dropdown will update automatically.</p>
+                @else
+                    <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                        Google Maps is unavailable because `GOOGLE_MAPS_API_KEY` is not configured.
+                    </div>
+                @endif
+            </div>
+
+            <div>
                 <label for="office_id" class="mb-1 block text-sm font-medium text-slate-700">Office</label>
                 <select class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="office_id" name="office_id" required>
                     <option value="">Select office</option>
-                    @foreach ($offices as $office)
-                        <option value="{{ $office->id }}" {{ old('office_id') == $office->id ? 'selected' : '' }}>
-                            {{ $office->name }}
-                        </option>
-                    @endforeach
                 </select>
             </div>
 
@@ -83,14 +102,47 @@
 </div>
 
 <script>
+    const municipalities = @json($municipalitiesForJs);
+    const offices = @json($officesForJs);
     const categories = @json($categoriesForJs);
     const services = @json($servicesForJs);
 
+    const oldOfficeId = "{{ old('office_id') }}";
     const oldCategoryId = "{{ old('service_category_id') }}";
     const oldServiceId = "{{ old('service_id') }}";
+    const municipalityInput = document.getElementById('municipality_id');
     const officeInput = document.getElementById('office_id');
     const categoryInput = document.getElementById('service_category_id');
     const serviceInput = document.getElementById('service_id');
+    const inferredMunicipalityId = (() => {
+        const selectedOffice = offices.find(item => String(item.id) === String(oldOfficeId));
+        return selectedOffice ? String(selectedOffice.municipality_id) : '';
+    })();
+
+    function refreshOffices() {
+        const municipalityId = municipalityInput.value;
+        let filtered = offices;
+
+        if (municipalityId) {
+            filtered = filtered.filter(item => String(item.municipality_id) === String(municipalityId));
+        }
+
+        officeInput.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = filtered.length ? 'Select office' : 'No office available';
+        officeInput.appendChild(defaultOption);
+
+        filtered.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.name;
+            if (String(item.id) === String(oldOfficeId)) {
+                option.selected = true;
+            }
+            officeInput.appendChild(option);
+        });
+    }
 
     function refreshCategories() {
         const officeId = officeInput.value;
@@ -146,12 +198,81 @@
         });
     }
 
+    function selectMunicipality(municipalityId) {
+        municipalityInput.value = municipalityId ? String(municipalityId) : '';
+        refreshOffices();
+        refreshCategories();
+        refreshServices();
+    }
+
+    if (inferredMunicipalityId) {
+        municipalityInput.value = inferredMunicipalityId;
+    }
+
+    refreshOffices();
     officeInput.addEventListener('change', () => {
+        refreshCategories();
+        refreshServices();
+    });
+    municipalityInput.addEventListener('change', () => {
+        refreshOffices();
         refreshCategories();
         refreshServices();
     });
     categoryInput.addEventListener('change', refreshServices);
     refreshCategories();
     refreshServices();
+
+    @if ($apiKey)
+        function initCitizenMunicipalityMap() {
+            const defaultLocation = { lat: 33.8938, lng: 35.5018 };
+            const map = new google.maps.Map(document.getElementById('municipality-map'), {
+                center: defaultLocation,
+                zoom: 10,
+            });
+            const infoWindow = new google.maps.InfoWindow();
+            const bounds = new google.maps.LatLngBounds();
+
+            municipalities.forEach((municipality) => {
+                const position = {
+                    lat: Number(municipality.latitude),
+                    lng: Number(municipality.longitude),
+                };
+
+                if (Number.isNaN(position.lat) || Number.isNaN(position.lng)) {
+                    return;
+                }
+
+                const marker = new google.maps.Marker({
+                    position,
+                    map,
+                    title: municipality.name,
+                });
+
+                marker.addListener('click', () => {
+                    selectMunicipality(municipality.id);
+                    infoWindow.setContent(
+                        `<div class="text-sm"><strong>${municipality.name}</strong><br>${municipality.region ?? ''}<br>${municipality.address ?? ''}</div>`
+                    );
+                    infoWindow.open({
+                        anchor: marker,
+                        map,
+                    });
+                    map.panTo(position);
+                });
+
+                bounds.extend(position);
+            });
+
+            if (!bounds.isEmpty()) {
+                map.fitBounds(bounds);
+            }
+        }
+
+        window.initCitizenMunicipalityMap = initCitizenMunicipalityMap;
+    @endif
 </script>
+@if ($apiKey)
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ $apiKey }}&callback=initCitizenMunicipalityMap" async defer></script>
+@endif
 @endsection

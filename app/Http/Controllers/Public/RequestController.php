@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\DocumentRequest;
+use App\Models\Municipality;
 use App\Models\Office;
 use App\Models\Request as CitizenRequest;
 use App\Models\Service;
@@ -40,12 +41,37 @@ class RequestController extends Controller
     // Show the form for creating a new request
     public function create()
     {
-        $offices = Office::query()->orderBy('name')->get(['id', 'name']);
+        $apiKey = env('GOOGLE_MAPS_API_KEY');
+        $municipalities = Municipality::query()
+            ->orderBy('name')
+            ->get(['id', 'name', 'region', 'address', 'latitude', 'longitude']);
+        $offices = Office::query()->orderBy('name')->get(['id', 'name', 'municipality_id']);
         $categories = ServiceCategory::query()->orderBy('name')->get(['id', 'name', 'office_id']);
         $services = Service::query()
             ->with(['office:id,name', 'serviceCategory:id,name'])
             ->orderBy('name')
             ->get(['id', 'name', 'office_id', 'service_category_id']);
+        $officesForJs = [];
+        foreach ($offices as $office) {
+            $officesForJs[] = [
+                'id' => $office->id,
+                'name' => $office->name,
+                'municipality_id' => $office->municipality_id,
+            ];
+        }
+
+        $municipalitiesForJs = [];
+        foreach ($municipalities as $municipality) {
+            $municipalitiesForJs[] = [
+                'id' => $municipality->id,
+                'name' => $municipality->name,
+                'region' => $municipality->region,
+                'address' => $municipality->address,
+                'latitude' => $municipality->latitude,
+                'longitude' => $municipality->longitude,
+            ];
+        }
+
         $servicesForJs = [];
         foreach ($services as $service) {
             $servicesForJs[] = [
@@ -70,18 +96,26 @@ class RequestController extends Controller
         if (!request()->expectsJson()) {
             return view('citizen.requests.create', [
                 'title' => 'Submit Request',
+                'apiKey' => $apiKey,
+                'municipalities' => $municipalities,
                 'offices' => $offices,
                 'categories' => $categories,
                 'services' => $services,
+                'municipalitiesForJs' => $municipalitiesForJs,
+                'officesForJs' => $officesForJs,
                 'categoriesForJs' => $categoriesForJs,
                 'servicesForJs' => $servicesForJs,
             ]);
         }
 
         return response()->json([
+            'apiKey' => $apiKey,
+            'municipalities' => $municipalities,
             'offices' => $offices,
             'categories' => $categories,
             'services' => $services,
+            'municipalitiesForJs' => $municipalitiesForJs,
+            'officesForJs' => $officesForJs,
             'categoriesForJs' => $categoriesForJs,
             'servicesForJs' => $servicesForJs,
         ], Response::HTTP_OK);
