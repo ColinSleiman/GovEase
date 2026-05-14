@@ -25,11 +25,39 @@
                     <p class="mb-2 text-sm"><strong>Status:</strong> {{ $requestData->status?->name ?? '-' }}</p>
                     <p class="mb-2 text-sm"><strong>Office:</strong> {{ $requestData->service?->office?->name ?? '-' }}</p>
                     <p class="mb-2 text-sm"><strong>Category:</strong> {{ $requestData->service?->serviceCategory?->name ?? '-' }}</p>
-                    <p class="mb-0 text-sm"><strong>Service:</strong> {{ $requestData->service?->name ?? '-' }}</p>
+                    <p class="mb-2 text-sm"><strong>Service:</strong> {{ $requestData->service?->name ?? '-' }}</p>
+                    <p class="mb-0 text-sm"><strong>Service Fee:</strong> ${{ number_format((float) ($requestData->service?->price ?? 0), 2) }}</p>
                 </div>
                 <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
                     <p class="text-sm"><strong>Note:</strong></p>
                     <p class="mt-2 text-sm text-slate-700">{{ $requestData->status_note ?: '-' }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card-padded">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Payment</h2>
+                    <p class="card-subtitle">Citizens must complete payment before the document request can move forward.</p>
+                </div>
+                @if ((float) ($requestData->service?->price ?? 0) > 0 && strtolower((string) ($requestData->payment?->status ?? '')) !== 'completed')
+                    <a href="{{ route('citizen.requests.payment', $requestData->id) }}" class="btn-base btn-variant-blue">Pay Now</a>
+                @endif
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-3">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <p class="text-xs uppercase tracking-wide text-slate-500">Amount</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">${{ number_format((float) ($requestData->service?->price ?? 0), 2) }}</p>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <p class="text-xs uppercase tracking-wide text-slate-500">Payment Status</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ $requestData->payment?->status ?? (((float) ($requestData->service?->price ?? 0) > 0) ? 'Pending Payment' : 'Not Required') }}</p>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <p class="text-xs uppercase tracking-wide text-slate-500">Reference</p>
+                    <p class="mt-2 break-all text-sm text-slate-700">{{ $requestData->payment?->transaction_reference ?? '-' }}</p>
                 </div>
             </div>
         </section>

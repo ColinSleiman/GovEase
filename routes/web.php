@@ -90,6 +90,9 @@ Route::middleware(['check.auth', 'check.role:Citizen'])->prefix('citizen')->name
     Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
     Route::get('/requests/create', [RequestController::class, 'create'])->name('requests.create');
     Route::post('/requests', [RequestController::class, 'store'])->name('requests.store');
+    Route::get('/requests/{request}/payment', [RequestController::class, 'payment'])->name('requests.payment');
+    Route::post('/requests/{request}/payment/create-intent', [RequestController::class, 'createPaymentIntent'])->name('requests.payment.create-intent');
+    Route::post('/requests/{request}/payment/confirm', [RequestController::class, 'confirmPayment'])->name('requests.payment.confirm');
     Route::get('/requests/{request}', [RequestController::class, 'show'])->name('requests.show');
     Route::get('/requests/{request}/edit', [RequestController::class, 'edit'])->name('requests.edit');
     Route::put('/requests/{request}', [RequestController::class, 'update'])->name('requests.update');

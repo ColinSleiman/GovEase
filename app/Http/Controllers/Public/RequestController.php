@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\DocumentRequest;
 use App\Models\Municipality;
 use App\Models\Office;
+use App\Models\Payment;
 use App\Models\Request as CitizenRequest;
 use App\Models\Service;
 use App\Models\ServiceCategory;
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class RequestController extends Controller
 {
@@ -23,7 +26,7 @@ class RequestController extends Controller
     public function index()
     {
         $data = CitizenRequest::query()
-            ->with(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents'])
+            ->with(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
@@ -50,7 +53,7 @@ class RequestController extends Controller
         $services = Service::query()
             ->with(['office:id,name', 'serviceCategory:id,name'])
             ->orderBy('name')
-            ->get(['id', 'name', 'office_id', 'service_category_id']);
+            ->get(['id', 'name', 'price', 'office_id', 'service_category_id']);
         $officesForJs = [];
         foreach ($offices as $office) {
             $officesForJs[] = [
@@ -77,6 +80,7 @@ class RequestController extends Controller
             $servicesForJs[] = [
                 'id' => $service->id,
                 'name' => $service->name,
+                'price' => (float) $service->price,
                 'office_id' => $service->office_id,
                 'service_category_id' => $service->service_category_id,
                 'office_name' => $service->office?->name,
@@ -222,6 +226,12 @@ class RequestController extends Controller
         });
 
         if (!request()->expectsJson()) {
+            if ((float) $selectedService->price > 0) {
+                return redirect()
+                    ->route('citizen.requests.payment', $req->id)
+                    ->with('success', 'Request submitted. Complete payment to continue processing.');
+            }
+
             return redirect()
                 ->route('citizen.requests.show', $req->id)
                 ->with('success', 'Request submitted successfully.');
@@ -233,7 +243,7 @@ class RequestController extends Controller
     // Display a specific request
     public function show(CitizenRequest $request)
     {
-        $request->load(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents']);
+        $request->load(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status']);
 
         if ((int) $request->user_id !== (int) Auth::id()) {
             return response()->json([
@@ -249,6 +259,136 @@ class RequestController extends Controller
         }
 
         return response()->json($request, Response::HTTP_OK);
+    }
+
+    public function payment(CitizenRequest $request)
+    {
+        $request->load(['status', 'service.office', 'service.serviceCategory', 'payment.status']);
+
+        if ((int) $request->user_id !== (int) Auth::id()) {
+            abort(Response::HTTP_FORBIDDEN, 'You can only access your own requests.');
+        }
+
+        $amount = (float) ($request->service?->price ?? 0);
+        if ($amount <= 0) {
+            return redirect()
+                ->route('citizen.requests.show', $request->id)
+                ->with('success', 'This request does not require payment.');
+        }
+
+        $isPaid = $request->payment && strtolower((string) $request->payment->status) === 'completed';
+        if ($isPaid) {
+            return redirect()
+                ->route('citizen.requests.show', $request->id)
+                ->with('success', 'This request has already been paid.');
+        }
+
+        return view('citizen.requests.payment', [
+            'title' => 'Pay Request',
+            'requestData' => $request,
+            'stripeKey' => env('STRIPE_KEY'),
+            'amount' => $amount,
+            'amountInCents' => (int) round($amount * 100),
+        ]);
+    }
+
+    public function createPaymentIntent(CitizenRequest $request)
+    {
+        $request->load(['service', 'payment']);
+
+        if ((int) $request->user_id !== (int) Auth::id()) {
+            return response()->json([
+                'message' => 'You can only pay for your own requests.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if (empty(env('STRIPE_SECRET'))) {
+            return response()->json([
+                'message' => 'Stripe is not configured on this environment.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $amount = (float) ($request->service?->price ?? 0);
+        if ($amount <= 0) {
+            return response()->json([
+                'message' => 'This request does not require payment.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($request->payment && strtolower((string) $request->payment->status) === 'completed') {
+            return response()->json([
+                'message' => 'This request has already been paid.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $intent = PaymentIntent::create([
+            'amount' => (int) round($amount * 100),
+            'currency' => 'usd',
+            'metadata' => [
+                'request_id' => (string) $request->id,
+                'tracking_number' => (string) $request->tracking_number,
+                'user_id' => (string) Auth::id(),
+            ],
+        ]);
+
+        return response()->json([
+            'clientSecret' => $intent->client_secret,
+        ], Response::HTTP_OK);
+    }
+
+    public function confirmPayment(Request $paymentRequest, CitizenRequest $request)
+    {
+        $request->load(['service', 'payment']);
+
+        if ((int) $request->user_id !== (int) Auth::id()) {
+            return response()->json([
+                'message' => 'You can only pay for your own requests.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $validated = $paymentRequest->validate([
+            'payment_intent_id' => ['required', 'string'],
+        ]);
+
+        if (empty(env('STRIPE_SECRET'))) {
+            return response()->json([
+                'message' => 'Stripe is not configured on this environment.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $intent = PaymentIntent::retrieve($validated['payment_intent_id']);
+
+        if (($intent->metadata['request_id'] ?? null) !== (string) $request->id) {
+            return response()->json([
+                'message' => 'This payment does not belong to the selected request.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($intent->status !== 'succeeded') {
+            return response()->json([
+                'message' => 'Payment has not been completed yet.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $completedStatus = Status::query()->where('name', 'Completed')->firstOrFail();
+
+        Payment::updateOrCreate(
+            ['request_id' => $request->id],
+            [
+                'amount' => (float) ($request->service?->price ?? 0),
+                'payment_method' => 'Stripe',
+                'status' => 'Completed',
+                'status_id' => $completedStatus->id,
+                'transaction_reference' => $intent->id,
+            ]
+        );
+
+        return response()->json([
+            'redirect_url' => route('citizen.requests.show', $request->id),
+        ], Response::HTTP_OK);
     }
 
     // Show the form for editing a request

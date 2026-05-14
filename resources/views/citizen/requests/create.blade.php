@@ -80,6 +80,19 @@
                 <select class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="service_id" name="service_id" required></select>
             </div>
 
+            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-900">Payment Summary</p>
+                        <p class="mt-1 text-xs text-slate-500">The citizen pays after submitting the request.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Service Fee</p>
+                        <p id="selected-service-price" class="text-lg font-semibold text-slate-900">$0.00</p>
+                    </div>
+                </div>
+            </div>
+
             <div>
                 <label for="document_type" class="mb-1 block text-sm font-medium text-slate-700">Document Type</label>
                 <input type="text" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="document_type" name="document_type" value="{{ old('document_type', 'Request Attachment') }}">
@@ -96,7 +109,7 @@
                 <textarea class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="status_note" name="status_note" rows="3">{{ old('status_note') }}</textarea>
             </div>
 
-            <button type="submit" class="btn-base btn-variant-blue">Submit Request</button>
+            <button type="submit" class="btn-base btn-variant-blue">Submit Request &amp; Continue to Payment</button>
         </form>
     </section>
 </div>
@@ -114,6 +127,7 @@
     const officeInput = document.getElementById('office_id');
     const categoryInput = document.getElementById('service_category_id');
     const serviceInput = document.getElementById('service_id');
+    const selectedServicePrice = document.getElementById('selected-service-price');
     const inferredMunicipalityId = (() => {
         const selectedOffice = offices.find(item => String(item.id) === String(oldOfficeId));
         return selectedOffice ? String(selectedOffice.municipality_id) : '';
@@ -190,12 +204,20 @@
         filtered.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
-            option.textContent = item.name + ' (' + (item.office_name || '-') + ' / ' + (item.category_name || '-') + ')';
+            option.textContent = item.name + ' - $' + Number(item.price || 0).toFixed(2) + ' (' + (item.office_name || '-') + ' / ' + (item.category_name || '-') + ')';
             if (String(item.id) === String(oldServiceId)) {
                 option.selected = true;
             }
             serviceInput.appendChild(option);
         });
+
+        refreshSelectedServicePrice();
+    }
+
+    function refreshSelectedServicePrice() {
+        const selectedService = services.find(item => String(item.id) === String(serviceInput.value));
+        const price = selectedService ? Number(selectedService.price || 0) : 0;
+        selectedServicePrice.textContent = '$' + price.toFixed(2);
     }
 
     function selectMunicipality(municipalityId) {
@@ -220,6 +242,7 @@
         refreshServices();
     });
     categoryInput.addEventListener('change', refreshServices);
+    serviceInput.addEventListener('change', refreshSelectedServicePrice);
     refreshCategories();
     refreshServices();
 
