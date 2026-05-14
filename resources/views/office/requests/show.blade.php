@@ -135,14 +135,22 @@
                                 <p class="font-medium text-slate-900">{{ $document->document_type }}</p>
                                 <p class="text-xs text-slate-500">Uploaded {{ $document->created_at?->format('M d, Y h:i A') }}</p>
                             </div>
-                            <a
-                                href="{{ route('documents.preview', $document->id) }}"
-                                target="_blank"
-                                rel="noopener"
-                                class="btn-base btn-variant-white btn-xs"
-                            >
-                                View Document
-                            </a>
+                            <div class="flex items-center gap-2">
+                                <a
+                                    href="{{ route('documents.preview', $document->id) }}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="btn-base btn-variant-white btn-xs"
+                                >
+                                    View Document
+                                </a>
+                                <a
+                                    href="{{ route('documents.download', $document->id) }}"
+                                    class="btn-base btn-variant-blue btn-xs"
+                                >
+                                    Download PDF
+                                </a>
+                            </div>
                         </li>
                     @endforeach
                 </ul>

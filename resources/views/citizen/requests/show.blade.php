@@ -71,9 +71,14 @@
                     @foreach ($requestData->documents as $document)
                         <li class="flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 text-sm">
                             <span>{{ $document->document_type }}</span>
-                            <a href="{{ route('documents.preview', $document->id) }}" target="_blank" rel="noopener" class="btn-base btn-variant-white btn-xs">
-                                View File
-                            </a>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('documents.preview', $document->id) }}" target="_blank" rel="noopener" class="btn-base btn-variant-white btn-xs">
+                                    View File
+                                </a>
+                                <a href="{{ route('documents.download', $document->id) }}" class="btn-base btn-variant-blue btn-xs">
+                                    Download PDF
+                                </a>
+                            </div>
                         </li>
                     @endforeach
                 </ul>
