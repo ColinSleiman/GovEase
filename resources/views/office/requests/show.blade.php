@@ -136,7 +136,7 @@
                                 <p class="text-xs text-slate-500">Uploaded {{ $document->created_at?->format('M d, Y h:i A') }}</p>
                             </div>
                             <a
-                                href="{{ asset('storage/' . $document->file_path) }}"
+                                href="{{ route('documents.preview', $document->id) }}"
                                 target="_blank"
                                 rel="noopener"
                                 class="btn-base btn-variant-white btn-xs"

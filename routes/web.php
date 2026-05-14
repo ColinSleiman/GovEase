@@ -140,6 +140,8 @@ Route::middleware(['check.auth', 'check.role:OfficeStaff'])->prefix('office')->n
     });
 
 Route::middleware(['check.auth', 'check.role:Citizen,OfficeStaff,Administrator'])->group(function () {
+    Route::get('documents/{document}/preview', [DocumentController::class, 'preview'])->name('documents.preview');
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
     Route::resource('documents', DocumentController::class);
     Route::resource('document-requests', DocumentRequestController::class);
     Route::resource('payments', PaymentController::class);
