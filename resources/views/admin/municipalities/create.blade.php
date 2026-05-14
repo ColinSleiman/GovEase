@@ -120,14 +120,25 @@
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Working Hours</label>
-                    <input
-                        type="text"
-                        name="working_hours"
-                        value="{{ old('working_hours') }}"
-                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm"
-                    >
-                    @error('working_hours')
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Opening Time</label>
+                    <select name="opening_time" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        @foreach ($timeOptions as $timeOption)
+                            <option value="{{ $timeOption }}" @selected(old('opening_time', '08:00 AM') === $timeOption)>{{ $timeOption }}</option>
+                        @endforeach
+                    </select>
+                    @error('opening_time')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Closing Time</label>
+                    <select name="closing_time" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        @foreach ($timeOptions as $timeOption)
+                            <option value="{{ $timeOption }}" @selected(old('closing_time', '05:00 PM') === $timeOption)>{{ $timeOption }}</option>
+                        @endforeach
+                    </select>
+                    @error('closing_time')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>

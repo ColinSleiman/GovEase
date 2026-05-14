@@ -59,6 +59,13 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
 
     Route::post('/stripe-test/create-intent', [AdminController::class, 'createIntent'])->name('stripe.create-intent');
 
+    Route::get('/requests', [AdminController::class, 'requests'])->name('requests.index');
+    Route::get('/requests/{request}', [AdminController::class, 'requestShow'])->name('requests.show');
+    Route::patch('/requests/{request}/status', [AdminController::class, 'updateRequestStatus'])->name('requests.update-status');
+    Route::get('/services/monitor', [AdminController::class, 'servicesMonitor'])->name('services.monitor');
+    Route::get('/reports/office-requests', [AdminController::class, 'reportsOfficeRequests'])->name('reports.office-requests');
+    Route::get('/reports/revenue', [AdminController::class, 'reportsRevenue'])->name('reports.revenue');
+
     Route::resource('offices', OfficeController::class);
     Route::resource('municipalities', MunicipalityController::class);
     Route::resource('users', UserController::class);
@@ -66,11 +73,6 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
     Route::resource('services', ServiceController::class);
     Route::resource('statuses', StatusController::class);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
-
-    Route::get('/requests', [AdminController::class, 'requests'])->name('requests.index');
-    Route::get('/services/monitor', [AdminController::class, 'servicesMonitor'])->name('services.monitor');
-    Route::get('/reports/office-requests', [AdminController::class, 'reportsOfficeRequests'])->name('reports.office-requests');
-    Route::get('/reports/revenue', [AdminController::class, 'reportsRevenue'])->name('reports.revenue');
 
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');

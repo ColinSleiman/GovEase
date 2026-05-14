@@ -10,6 +10,13 @@
 
     <nav class="{{ $mobile ? 'admin-sidebar-nav-mobile' : 'admin-sidebar-nav' }}">
         <section class="admin-sidebar-group">
+            <h2 class="admin-sidebar-group-title">Dashboard</h2>
+            <a href="{{ route('admin.dashboard') }}" class="admin-sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                Overview
+            </a>
+        </section>
+
+        <section class="admin-sidebar-group">
             <h2 class="admin-sidebar-group-title">Municipalities Management</h2>
             <a href="{{ route('admin.municipalities.create') }}" class="admin-sidebar-link">
                 Create Municipality

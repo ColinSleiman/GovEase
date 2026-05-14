@@ -61,8 +61,26 @@
                     <input type="text" id="google_maps_location" name="google_maps_location" value="{{ old('google_maps_location', $municipality->google_maps_location) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Working Hours</label>
-                    <input type="text" name="working_hours" value="{{ old('working_hours', $municipality->working_hours) }}" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Opening Time</label>
+                    <select name="opening_time" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        @foreach ($timeOptions as $timeOption)
+                            <option value="{{ $timeOption }}" @selected(old('opening_time', $openingTime) === $timeOption)>{{ $timeOption }}</option>
+                        @endforeach
+                    </select>
+                    @error('opening_time')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Closing Time</label>
+                    <select name="closing_time" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm">
+                        @foreach ($timeOptions as $timeOption)
+                            <option value="{{ $timeOption }}" @selected(old('closing_time', $closingTime) === $timeOption)>{{ $timeOption }}</option>
+                        @endforeach
+                    </select>
+                    @error('closing_time')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Contact Info</label>
