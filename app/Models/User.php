@@ -53,4 +53,6 @@ class User extends Authenticatable
     public function receivedMessages() { return $this->hasMany(Message::class, 'receiver_id'); }   
 
     public function reviews() { return $this->hasMany(Review::class); }
+
+    public function appointments() { return $this->hasMany(Appointment::class); }
 }

@@ -19,7 +19,9 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Citizen\CitizenController;
+use App\Http\Controllers\Citizen\AppointmentController as CitizenAppointmentController;
 use App\Http\Controllers\Citizen\ReviewController as CitizenReviewController;
+use App\Http\Controllers\Office\OfficeAppointmentController;
 use App\Http\Controllers\Office\OfficeDashboardController;
 use App\Http\Controllers\Office\OfficeRequestController;
 use App\Http\Controllers\Office\OfficeReviewController;
@@ -108,6 +110,10 @@ Route::middleware(['check.auth', 'check.role:Citizen'])->prefix('citizen')->name
     Route::post('/reviews', [CitizenReviewController::class, 'store'])->name('reviews.store');
     Route::get('/reviews/{review}/edit', [CitizenReviewController::class, 'edit'])->name('reviews.edit');
     Route::put('/reviews/{review}', [CitizenReviewController::class, 'update'])->name('reviews.update');
+    Route::get('/appointments', [CitizenAppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/create', [CitizenAppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [CitizenAppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/slots', [CitizenAppointmentController::class, 'slots'])->name('appointments.slots');
 
     Route::get('/service-categories/by-office/{office}', [RequestController::class, 'categoriesByOffice'])->name('service-categories.by-office');
     Route::get('/services/by-office-category', [RequestController::class, 'servicesByOfficeAndCategory'])->name('services.by-office-category');
@@ -121,6 +127,12 @@ Route::middleware(['check.auth', 'check.role:OfficeStaff'])->prefix('office')->n
         Route::get('/requests', [OfficeRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{request}', [OfficeRequestController::class, 'show'])->name('requests.show');
         Route::patch('/requests/{request}/status', [OfficeRequestController::class, 'updateStatus'])->name('requests.update-status');
+        Route::get('/appointments', [OfficeAppointmentController::class, 'index'])->name('appointments.index');
+        Route::get('/appointments/slots', [OfficeAppointmentController::class, 'slots'])->name('appointments.slots');
+        Route::get('/appointments/{appointment}', [OfficeAppointmentController::class, 'show'])->name('appointments.show');
+        Route::get('/appointments/{appointment}/edit', [OfficeAppointmentController::class, 'edit'])->name('appointments.edit');
+        Route::put('/appointments/{appointment}', [OfficeAppointmentController::class, 'update'])->name('appointments.update');
+        Route::delete('/appointments/{appointment}', [OfficeAppointmentController::class, 'destroy'])->name('appointments.destroy');
         Route::get('/reviews', [OfficeReviewController::class, 'index'])->name('reviews.index');
 
         Route::resource('service-categories', OfficeServiceCategoryController::class);

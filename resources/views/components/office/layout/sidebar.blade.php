@@ -21,6 +21,9 @@
             <a href="{{ route('office.requests.index') }}" class="admin-sidebar-link">
                 Incoming Requests
             </a>
+            <a href="{{ route('office.appointments.index') }}" class="admin-sidebar-link">
+                Appointments
+            </a>
         </section>
 
         <section class="admin-sidebar-group">

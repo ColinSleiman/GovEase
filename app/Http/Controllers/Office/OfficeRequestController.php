@@ -7,11 +7,15 @@ use App\Models\Request as ServiceRequest;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\Status;
+use App\Services\RequestPdfGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OfficeRequestController extends Controller
 {
+    public function __construct(private readonly RequestPdfGenerator $pdfGenerator)
+    {
+    }
     // Office request management controller (Blade pages + office-only scope).
     public function index(Request $request)
     {
@@ -134,6 +138,9 @@ class OfficeRequestController extends Controller
             'status_note' => $validated['status_note'] ?? null,
             'reviewed_by' => Auth::id(),
         ]);
+
+        $request->load(['status', 'payment', 'service.office.municipality', 'user', 'reviewer']);
+        $this->pdfGenerator->generateForCompletedPaidRequest($request);
 
         return back()->with('success', 'Request status updated successfully.');
     }

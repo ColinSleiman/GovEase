@@ -12,6 +12,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\Status;
 use App\Models\User;
+use App\Services\RequestPdfGenerator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -20,6 +21,9 @@ use Stripe\PaymentIntent;
 
 class AdminController extends Controller
 {
+    public function __construct(private readonly RequestPdfGenerator $pdfGenerator)
+    {
+    }
     public function index(){ return redirect()->route('admin.dashboard'); }
     
     public function dashboard()
@@ -160,6 +164,9 @@ class AdminController extends Controller
             'status_note' => $validated['status_note'] ?? null,
             'reviewed_by' => Auth::id(),
         ]);
+
+        $request->load(['status', 'payment', 'service.office.municipality', 'user', 'reviewer']);
+        $this->pdfGenerator->generateForCompletedPaidRequest($request);
 
         return back()->with('success', 'Request status updated successfully.');
     }

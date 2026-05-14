@@ -12,6 +12,7 @@ use App\Models\Request as CitizenRequest;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\Status;
+use App\Services\RequestPdfGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,9 @@ use Stripe\Stripe;
 
 class RequestController extends Controller
 {
+    public function __construct(private readonly RequestPdfGenerator $pdfGenerator)
+    {
+    }
     // Citizen request controller (citizen portal + request creation flow).
     // Display all requests
     public function index()
@@ -385,6 +389,9 @@ class RequestController extends Controller
                 'transaction_reference' => $intent->id,
             ]
         );
+
+        $request->load(['status', 'payment', 'service.office.municipality', 'user', 'reviewer']);
+        $this->pdfGenerator->generateForCompletedPaidRequest($request);
 
         return response()->json([
             'redirect_url' => route('citizen.requests.show', $request->id),

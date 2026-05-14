@@ -21,6 +21,12 @@
         </section>
 
         <section class="citizen-sidebar-group">
+            <h2 class="citizen-sidebar-group-title">Appointments</h2>
+            <a href="{{ route('citizen.appointments.create') }}" class="citizen-sidebar-link">Book Appointment</a>
+            <a href="{{ route('citizen.appointments.index') }}" class="citizen-sidebar-link">My Appointments</a>
+        </section>
+
+        <section class="citizen-sidebar-group">
             <h2 class="citizen-sidebar-group-title">Feedback</h2>
             <a href="{{ route('citizen.reviews.index') }}" class="citizen-sidebar-link">Rate Services</a>
         </section>
