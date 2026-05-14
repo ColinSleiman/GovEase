@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Citizen;
 
 use App\Http\Controllers\Controller;
 use App\Models\Request as CitizenRequest;
+use App\Models\Review;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,23 @@ class CitizenController extends Controller
         $userId = Auth::id();
 
         $requests = CitizenRequest::query()
-            ->with(['status', 'service.office', 'service.serviceCategory'])
+            ->with(['status', 'service.office', 'service.serviceCategory', 'review'])
+            ->where('user_id', $userId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $reviewableRequests = CitizenRequest::query()
+            ->with(['service.office', 'service.serviceCategory', 'review', 'status'])
+            ->where('user_id', $userId)
+            ->whereHas('status', fn ($query) => $query->where('name', 'Completed'))
+            ->doesntHave('review')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentReviews = Review::query()
+            ->with(['office', 'service'])
             ->where('user_id', $userId)
             ->latest()
             ->take(5)
@@ -40,7 +57,9 @@ class CitizenController extends Controller
             'totalRequests',
             'pendingCount',
             'inReviewCount',
-            'completedCount'
+            'completedCount',
+            'reviewableRequests',
+            'recentReviews'
         ));
     }
 }

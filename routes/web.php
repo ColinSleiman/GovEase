@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Citizen\CitizenController;
+use App\Http\Controllers\Citizen\ReviewController as CitizenReviewController;
 use App\Http\Controllers\Office\OfficeDashboardController;
 use App\Http\Controllers\Office\OfficeRequestController;
 use App\Http\Controllers\Office\OfficeServiceCategoryController;
@@ -100,6 +101,11 @@ Route::middleware(['check.auth', 'check.role:Citizen'])->prefix('citizen')->name
     Route::put('/requests/{request}', [RequestController::class, 'update'])->name('requests.update');
     Route::patch('/requests/{request}', [RequestController::class, 'update']);
     Route::delete('/requests/{request}', [RequestController::class, 'destroy'])->name('requests.destroy');
+    Route::get('/reviews', [CitizenReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/reviews/create/{request}', [CitizenReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/reviews', [CitizenReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit', [CitizenReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}', [CitizenReviewController::class, 'update'])->name('reviews.update');
 
     Route::get('/service-categories/by-office/{office}', [RequestController::class, 'categoriesByOffice'])->name('service-categories.by-office');
     Route::get('/services/by-office-category', [RequestController::class, 'servicesByOfficeAndCategory'])->name('services.by-office-category');

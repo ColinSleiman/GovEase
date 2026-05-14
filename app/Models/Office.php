@@ -44,4 +44,9 @@ class Office extends Model
     {
         return $this->hasMany(ServiceCategory::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

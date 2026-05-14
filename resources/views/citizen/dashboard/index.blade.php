@@ -37,6 +37,87 @@
         <section class="card-padded">
             <div class="card-header">
                 <div>
+                    <h2 class="card-title">Rate and Review Office Services</h2>
+                    <p class="card-subtitle">Leave comments and feedback for your completed service requests.</p>
+                </div>
+                <a href="{{ route('citizen.reviews.index') }}" class="btn-base btn-variant-white">Open Reviews</a>
+            </div>
+            <div class="admin-table-scroll">
+                <table class="admin-table">
+                    <thead class="admin-table-head">
+                    <tr>
+                        <th class="admin-table-th">Tracking #</th>
+                        <th class="admin-table-th">Office</th>
+                        <th class="admin-table-th">Service</th>
+                        <th class="admin-table-th-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="admin-table-body">
+                    @forelse ($reviewableRequests as $row)
+                        <tr class="admin-table-row">
+                            <td class="admin-table-td">{{ $row->tracking_number }}</td>
+                            <td class="admin-table-td">{{ $row->service?->office?->name ?? '-' }}</td>
+                            <td class="admin-table-td">{{ $row->service?->name ?? '-' }}</td>
+                            <td class="admin-table-actions-cell">
+                                <div class="admin-actions">
+                                    <a href="{{ route('citizen.reviews.create', $row->id) }}" class="btn-base btn-variant-blue btn-xs">Review</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="admin-empty">No completed services are waiting for your feedback.</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card-padded">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">My Recent Feedback</h2>
+                    <p class="card-subtitle">Latest ratings and comments you have shared.</p>
+                </div>
+            </div>
+            <div class="admin-table-scroll">
+                <table class="admin-table">
+                    <thead class="admin-table-head">
+                    <tr>
+                        <th class="admin-table-th">Office</th>
+                        <th class="admin-table-th">Service</th>
+                        <th class="admin-table-th">Rating</th>
+                        <th class="admin-table-th">Comment</th>
+                        <th class="admin-table-th-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="admin-table-body">
+                    @forelse ($recentReviews as $review)
+                        <tr class="admin-table-row">
+                            <td class="admin-table-td">{{ $review->office?->name ?? '-' }}</td>
+                            <td class="admin-table-td">{{ $review->service?->name ?? '-' }}</td>
+                            <td class="admin-table-td">{{ $review->rating }}/5</td>
+                            <td class="admin-table-td">{{ $review->comment }}</td>
+                            <td class="admin-table-actions-cell">
+                                <div class="admin-actions">
+                                    <a href="{{ route('citizen.reviews.edit', $review->id) }}" class="btn-base btn-variant-white btn-xs">Edit</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="admin-empty">You have not submitted any reviews yet.</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card-padded">
+            <div class="card-header">
+                <div>
                     <h2 class="card-title">Latest Requests</h2>
                     <p class="card-subtitle">Your five most recent service requests.</p>
                 </div>

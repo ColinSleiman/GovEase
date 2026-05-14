@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Office;
 
 use App\Http\Controllers\Controller;
 use App\Models\Request as ServiceRequest;
+use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,6 +36,9 @@ class OfficeDashboardController extends Controller
             ->take(8)
             ->get();
 
+        $serviceCount = Service::query()->where('office_id', $officeId)->count();
+        $categoryCount = ServiceCategory::query()->where('office_id', $officeId)->count();
+
         return view('office.dashboard', [
             'totalRequests' => (clone $baseQuery)->count(),
             'pendingCount' => $statusCounts['pending'] ?? 0,
@@ -42,6 +47,8 @@ class OfficeDashboardController extends Controller
             'approvedCount' => $statusCounts['approved'] ?? 0,
             'rejectedCount' => $statusCounts['rejected'] ?? 0,
             'completedCount' => $statusCounts['completed'] ?? 0,
+            'serviceCount' => $serviceCount,
+            'categoryCount' => $categoryCount,
             'recentRequests' => $recentRequests,
         ]);
     }

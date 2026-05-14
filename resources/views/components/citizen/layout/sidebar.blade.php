@@ -19,5 +19,10 @@
             <a href="{{ route('citizen.requests.create') }}" class="citizen-sidebar-link">Create Request</a>
             <a href="{{ route('citizen.requests.index') }}" class="citizen-sidebar-link">My Requests</a>
         </section>
+
+        <section class="citizen-sidebar-group">
+            <h2 class="citizen-sidebar-group-title">Feedback</h2>
+            <a href="{{ route('citizen.reviews.index') }}" class="citizen-sidebar-link">Rate Services</a>
+        </section>
     </nav>
 </div>

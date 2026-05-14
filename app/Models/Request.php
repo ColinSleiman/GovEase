@@ -57,6 +57,7 @@ class Request extends Model
     public function user() { return $this->belongsTo(User::class); }
     public function reviewer() { return $this->belongsTo(User::class, 'reviewed_by'); }
     public function payment() { return $this->hasOne(Payment::class); }
+    public function review() { return $this->hasOne(Review::class); }
     public function documentRequests() { return $this->hasMany(DocumentRequest::class); }
     public function documents() { return $this->hasManyThrough(Document::class, DocumentRequest::class, 'request_id', 'id', 'id', 'document_id'); }
 

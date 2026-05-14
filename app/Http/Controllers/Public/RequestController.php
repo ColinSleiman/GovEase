@@ -26,7 +26,7 @@ class RequestController extends Controller
     public function index()
     {
         $data = CitizenRequest::query()
-            ->with(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status'])
+            ->with(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status', 'review'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
@@ -243,7 +243,7 @@ class RequestController extends Controller
     // Display a specific request
     public function show(CitizenRequest $request)
     {
-        $request->load(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status']);
+        $request->load(['status', 'service.office', 'service.serviceCategory', 'user', 'reviewer', 'documents', 'payment.status', 'review']);
 
         if ((int) $request->user_id !== (int) Auth::id()) {
             return response()->json([

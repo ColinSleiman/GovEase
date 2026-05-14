@@ -30,4 +30,9 @@ class Service extends Model
         return $this->hasMany(Request::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }

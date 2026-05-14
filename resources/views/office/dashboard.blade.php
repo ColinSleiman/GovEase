@@ -38,6 +38,27 @@
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Completed</p>
                 <p class="mt-2 text-2xl font-bold text-emerald-700">{{ $completedCount }}</p>
             </article>
+            <article class="card-padded">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Service Categories</p>
+                <p class="mt-2 text-2xl font-bold text-slate-900">{{ $categoryCount }}</p>
+            </article>
+            <article class="card-padded">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Services</p>
+                <p class="mt-2 text-2xl font-bold text-slate-900">{{ $serviceCount }}</p>
+            </article>
+        </section>
+
+        <section class="card-padded">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Service Management</h2>
+                    <p class="card-subtitle">Create, update, and delete service categories and services for your office.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <x-office.actions.button :href="route('office.service-categories.index')" variant="white">Manage Categories</x-office.actions.button>
+                    <x-office.actions.button :href="route('office.services.index')" variant="blue">Manage Services</x-office.actions.button>
+                </div>
+            </div>
         </section>
 
         <section class="card-padded">

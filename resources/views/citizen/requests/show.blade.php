@@ -79,5 +79,30 @@
                 </ul>
             @endif
         </section>
+
+        @if (strtolower((string) ($requestData->status?->name ?? '')) === 'completed')
+            <section class="card-padded">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Feedback</h2>
+                        <p class="card-subtitle">Rate and review the office service after completion.</p>
+                    </div>
+                    @if ($requestData->review)
+                        <a href="{{ route('citizen.reviews.edit', $requestData->review->id) }}" class="btn-base btn-variant-white">Edit Review</a>
+                    @else
+                        <a href="{{ route('citizen.reviews.create', $requestData->id) }}" class="btn-base btn-variant-blue">Leave Review</a>
+                    @endif
+                </div>
+
+                @if ($requestData->review)
+                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p class="text-sm"><strong>Rating:</strong> {{ $requestData->review->rating }}/5</p>
+                        <p class="mt-2 text-sm text-slate-700">{{ $requestData->review->comment }}</p>
+                    </div>
+                @else
+                    <p class="text-sm text-slate-600">This completed request is ready for your feedback.</p>
+                @endif
+            </section>
+        @endif
     </div>
 @endsection
