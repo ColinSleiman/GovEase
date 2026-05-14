@@ -22,6 +22,7 @@ use App\Http\Controllers\Citizen\CitizenController;
 use App\Http\Controllers\Citizen\ReviewController as CitizenReviewController;
 use App\Http\Controllers\Office\OfficeDashboardController;
 use App\Http\Controllers\Office\OfficeRequestController;
+use App\Http\Controllers\Office\OfficeReviewController;
 use App\Http\Controllers\Office\OfficeServiceCategoryController;
 use App\Http\Controllers\Office\OfficeServiceController;
 
@@ -64,6 +65,7 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
     Route::get('/requests/{request}', [AdminController::class, 'requestShow'])->name('requests.show');
     Route::patch('/requests/{request}/status', [AdminController::class, 'updateRequestStatus'])->name('requests.update-status');
     Route::get('/services/monitor', [AdminController::class, 'servicesMonitor'])->name('services.monitor');
+    Route::get('/reviews', [AdminController::class, 'reviews'])->name('reviews.index');
     Route::get('/reports/office-requests', [AdminController::class, 'reportsOfficeRequests'])->name('reports.office-requests');
     Route::get('/reports/revenue', [AdminController::class, 'reportsRevenue'])->name('reports.revenue');
 
@@ -119,6 +121,7 @@ Route::middleware(['check.auth', 'check.role:OfficeStaff'])->prefix('office')->n
         Route::get('/requests', [OfficeRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{request}', [OfficeRequestController::class, 'show'])->name('requests.show');
         Route::patch('/requests/{request}/status', [OfficeRequestController::class, 'updateStatus'])->name('requests.update-status');
+        Route::get('/reviews', [OfficeReviewController::class, 'index'])->name('reviews.index');
 
         Route::resource('service-categories', OfficeServiceCategoryController::class);
         Route::resource('services', OfficeServiceController::class);

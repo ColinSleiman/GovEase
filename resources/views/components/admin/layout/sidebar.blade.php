@@ -64,6 +64,9 @@
             <a href="{{ route('admin.reports.revenue') }}" class="admin-sidebar-link">
                 Revenue Reports
             </a>
+            <a href="{{ route('admin.reviews.index') }}" class="admin-sidebar-link">
+                Citizen Reviews
+            </a>
         </section>
 
         <section class="admin-sidebar-group">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Municipality;
 use App\Models\Office;
 use App\Models\Payment;
+use App\Models\Review;
 use App\Models\Request as ServiceRequest;
 use App\Models\Service;
 use App\Models\ServiceCategory;
@@ -267,6 +268,58 @@ class AdminController extends Controller
             'summaryRevenue' => (float) Payment::query()->where('status', 'Completed')->sum('amount'),
             'filters' => [
                 'office_id' => $request->input('office_id'),
+            ],
+        ]);
+    }
+
+    public function reviews(Request $request)
+    {
+        $query = Review::query()
+            ->with(['user', 'office.municipality', 'service.serviceCategory', 'request'])
+            ->latest();
+
+        if ($request->filled('office_id')) {
+            $query->where('office_id', $request->integer('office_id'));
+        }
+
+        if ($request->filled('service_id')) {
+            $query->where('service_id', $request->integer('service_id'));
+        }
+
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->integer('rating'));
+        }
+
+        if ($request->filled('search')) {
+            $search = trim((string) $request->input('search'));
+            $query->where(function ($searchQuery) use ($search) {
+                $searchQuery
+                    ->where('comment', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery
+                            ->whereRaw("CONCAT(firstName, ' ', lastName) like ?", ['%' . $search . '%'])
+                            ->orWhere('email', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('service', function ($serviceQuery) use ($search) {
+                        $serviceQuery->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('office', function ($officeQuery) use ($search) {
+                        $officeQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $rows = $query->paginate(10)->withQueryString();
+
+        return view('admin.reviews.index', [
+            'rows' => $rows,
+            'offices' => Office::query()->orderBy('name')->get(['id', 'name']),
+            'services' => Service::query()->orderBy('name')->get(['id', 'name']),
+            'filters' => [
+                'office_id' => $request->input('office_id'),
+                'service_id' => $request->input('service_id'),
+                'rating' => $request->input('rating'),
+                'search' => $request->input('search'),
             ],
         ]);
     }

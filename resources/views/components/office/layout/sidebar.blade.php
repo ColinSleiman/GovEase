@@ -31,6 +31,9 @@
             <a href="{{ route('office.services.index') }}" class="admin-sidebar-link">
                 Services
             </a>
+            <a href="{{ route('office.reviews.index') }}" class="admin-sidebar-link">
+                Citizen Reviews
+            </a>
         </section>
     </nav>
 </div>
