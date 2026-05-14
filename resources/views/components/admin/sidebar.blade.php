@@ -58,5 +58,15 @@
                 Revenue Reports
             </a>
         </section>
+
+        <section class="space-y-2">
+            <h2 class="px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Stripe Testing</h2>
+            <a href="{{ route('admin.stripe.test') }}" class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800 hover:text-white">
+                Payment Test Page
+            </a>
+            <a href="{{ route('admin.stripe.success') }}" class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800 hover:text-white">
+                Success Page
+            </a>
+        </section>
     </nav>
 </div>

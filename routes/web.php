@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ServiceCategoryController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Payment\StripeController;
 
 // Public
 use App\Http\Controllers\Public\DocumentController;
@@ -76,4 +77,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications.index');
     Route::get('/logs', [AdminController::class, 'logs'])->name('logs.index');
     Route::get('/help', [AdminController::class, 'help'])->name('help.index');
+    Route::get('/stripe-test', [AdminController::class, 'stripeTest'])->name('stripe.test');
+    Route::get('/stripe-test/success', [AdminController::class, 'stripeSuccess'])->name('stripe.success');
+    Route::post('/stripe-test/create-intent', [AdminController::class, 'createIntent'])->name('stripe.create-intent');
 });
+
+Route::post('/stripe', [StripeController::class, 'store'])->name('stripe.payment');
