@@ -23,7 +23,7 @@ class OTPController extends Controller
         $user = Auth::user();
         
         if ($user->verified) {
-            return redirect()->route('home')->with('info', 'Your account is already verified');
+            return redirect()->route('citizen.dashboard')->with('info', 'Your account is already verified');
         }
 
         return view('auth.verify-otp', ['title' => 'Verify Account']);
@@ -69,7 +69,7 @@ class OTPController extends Controller
         $user = Auth::user();
         
         if ($user->verified) {
-            return redirect()->route('home')->with('success', 'Account already verified');
+            return redirect()->route('citizen.dashboard')->with('success', 'Account already verified');
         }
 
         // Use the correct Spatie OTP validation method
@@ -82,7 +82,7 @@ class OTPController extends Controller
             // Mark user as verified
             $user->update(['verified' => true]);
             
-            return redirect()->route('home')->with('success', 'Account verified successfully!');
+            return redirect()->route('citizen.dashboard')->with('success', 'Account verified successfully!');
         }
 
         return back()->withErrors([

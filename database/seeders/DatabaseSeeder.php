@@ -22,27 +22,30 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
         ]);
 
+        $latitude = 33.83433726548953;
+        $longitude = 35.54456520686778;
+
         $municipality = Municipality::updateOrCreate(
-            ['name' => 'Default Municipality', 'region' => 'NCR'],
+            ['name' => 'Baabda', 'region' => 'Lebanon'],
             [
-                'address' => 'City Hall, Main Road',
-                'google_maps_location' => '14.5995000,120.9842000',
-                'latitude' => 14.5995000,
-                'longitude' => 120.9842000,
+                'address' => 'Baabda Municipality, Mount Lebanon Governorate, Lebanon',
+                'google_maps_location' => $latitude.','.$longitude,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
                 'working_hours' => '8:00 AM - 5:00 PM',
-                'contact_info' => '+63 2 0000 0000',
+                'contact_info' => '+961 5 920 000',
             ]
         );
 
         $office = Office::updateOrCreate(
-            ['name' => 'Default Government Office', 'municipality_id' => $municipality->id],
+            ['name' => 'Baabda Municipality Office', 'municipality_id' => $municipality->id],
             [
-                'address' => '2nd Floor, City Hall',
+                'address' => 'Baabda Municipality, Mount Lebanon Governorate, Lebanon',
                 'google_maps_location' => $municipality->google_maps_location,
                 'latitude' => $municipality->latitude,
                 'longitude' => $municipality->longitude,
                 'working_hours' => '8:00 AM - 5:00 PM',
-                'contact_info' => '+63 2 1111 1111',
+                'contact_info' => '+961 5 920 001',
             ]
         );
 
@@ -51,7 +54,7 @@ class DatabaseSeeder extends Seeder
         $citizenRole = Role::where('name', 'Citizen')->firstOrFail();
 
         User::updateOrCreate(
-            ['email' => 'admin@goverse.local'],
+            ['email' => 'admin@govease.com'],
             [
                 'firstName' => 'Admin',
                 'lastName' => 'Admin',
@@ -69,7 +72,7 @@ class DatabaseSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'officestaff@goverse.local'],
+            ['email' => 'officestaff@govease.com'],
             [
                 'firstName' => 'Office',
                 'lastName' => 'Staff',
@@ -87,7 +90,7 @@ class DatabaseSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'citizen@goverse.local'],
+            ['email' => 'citizen@govease.com'],
             [
                 'firstName' => 'Default',
                 'lastName' => 'Citizen',

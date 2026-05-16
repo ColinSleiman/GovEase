@@ -36,6 +36,7 @@ use App\Http\Controllers\Public\DocumentController;
 use App\Http\Controllers\Public\DocumentRequestController;
 use App\Http\Controllers\Public\PaymentController;
 use App\Http\Controllers\Public\RequestController;
+use App\Http\Controllers\Public\DocumentReaderController;
 
 
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
@@ -55,6 +56,9 @@ Route::middleware(['check.auth'])->group(function () {
     Route::post('/otp/send', [OTPController::class, 'send'])->name('otp.send');
     Route::post('/otp/verify', [OTPController::class, 'verify'])->name('otp.verify');
 });
+
+Route::get('/document-reader', [DocumentReaderController::class, 'create'])->name('document.reader.create');
+Route::post('/document-reader', [DocumentReaderController::class, 'upload'])->name('document.reader.upload');
 
 
 Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->name('admin.')->group(function () {
@@ -87,6 +91,10 @@ Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->
     Route::get('/stripe-test', [AdminController::class, 'stripeTest'])->name('stripe.test');
     Route::get('/stripe-test/success', [AdminController::class, 'stripeSuccess'])->name('stripe.success');
     Route::post('/stripe-test/create-intent', [AdminController::class, 'createIntent'])->name('stripe.create-intent');
+
+    Route::get('/document-reader', [DocumentReaderController::class, 'index'])->name('document.reader');
+    Route::get('/document-reader/preview/{fileName}', [DocumentReaderController::class, 'preview'])->name('document.reader.preview');
+    Route::get('/document-reader/download/{fileName}', [DocumentReaderController::class, 'download'])->name('document.reader.download');
 });
 
 
@@ -121,23 +129,23 @@ Route::middleware(['check.auth', 'check.role:Citizen'])->prefix('citizen')->name
 
 
 Route::middleware(['check.auth', 'check.role:OfficeStaff'])->prefix('office')->name('office.')->group(function () {
-        Route::get('/', [OfficeDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/dashboard', [OfficeDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [OfficeDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [OfficeDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/requests', [OfficeRequestController::class, 'index'])->name('requests.index');
-        Route::get('/requests/{request}', [OfficeRequestController::class, 'show'])->name('requests.show');
-        Route::patch('/requests/{request}/status', [OfficeRequestController::class, 'updateStatus'])->name('requests.update-status');
-        Route::get('/appointments', [OfficeAppointmentController::class, 'index'])->name('appointments.index');
-        Route::get('/appointments/slots', [OfficeAppointmentController::class, 'slots'])->name('appointments.slots');
-        Route::get('/appointments/{appointment}', [OfficeAppointmentController::class, 'show'])->name('appointments.show');
-        Route::get('/appointments/{appointment}/edit', [OfficeAppointmentController::class, 'edit'])->name('appointments.edit');
-        Route::put('/appointments/{appointment}', [OfficeAppointmentController::class, 'update'])->name('appointments.update');
-        Route::delete('/appointments/{appointment}', [OfficeAppointmentController::class, 'destroy'])->name('appointments.destroy');
-        Route::get('/reviews', [OfficeReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/requests', [OfficeRequestController::class, 'index'])->name('requests.index');
+    Route::get('/requests/{request}', [OfficeRequestController::class, 'show'])->name('requests.show');
+    Route::patch('/requests/{request}/status', [OfficeRequestController::class, 'updateStatus'])->name('requests.update-status');
+    Route::get('/appointments', [OfficeAppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/slots', [OfficeAppointmentController::class, 'slots'])->name('appointments.slots');
+    Route::get('/appointments/{appointment}', [OfficeAppointmentController::class, 'show'])->name('appointments.show');
+    Route::get('/appointments/{appointment}/edit', [OfficeAppointmentController::class, 'edit'])->name('appointments.edit');
+    Route::put('/appointments/{appointment}', [OfficeAppointmentController::class, 'update'])->name('appointments.update');
+    Route::delete('/appointments/{appointment}', [OfficeAppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::get('/reviews', [OfficeReviewController::class, 'index'])->name('reviews.index');
 
-        Route::resource('service-categories', OfficeServiceCategoryController::class);
-        Route::resource('services', OfficeServiceController::class);
-    });
+    Route::resource('service-categories', OfficeServiceCategoryController::class);
+    Route::resource('services', OfficeServiceController::class);
+});
 
 Route::middleware(['check.auth', 'check.role:Citizen,OfficeStaff,Administrator'])->group(function () {
     Route::get('documents/{document}/preview', [DocumentController::class, 'preview'])->name('documents.preview');

@@ -37,6 +37,8 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home')->with('success','Account created successfully');
+        return redirect()
+            ->route('citizen.dashboard')
+            ->with('success', 'Account created successfully. Please verify your account to continue.');
     }
 }

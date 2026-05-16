@@ -22,6 +22,8 @@
                             <x-citizen.layout.sidebar :mobile="true" />
                         </div>
 
+                        <x-citizen.verify-account-banner />
+
                         @yield('content')
                     </div>
                 </main>
