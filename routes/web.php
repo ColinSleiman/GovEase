@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\OTPController;
+use App\Http\Controllers\Auth\SocialAuthController;
 
 
 // Admin
@@ -44,7 +45,13 @@ Route::get('/portal-access', function () { return view('auth.portal', ['title' =
 
 Route::get('/api/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
+    ->where('provider', 'github|facebook|instagram')
+    ->name('social.redirect');
 
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
+    ->where('provider', 'github|facebook|instagram')
+    ->name('social.callback');
 
 // auth routes
 Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest')->name('login');
