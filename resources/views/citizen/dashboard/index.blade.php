@@ -4,6 +4,12 @@
 
 @section('content')
     <div class="citizen-page">
+        @if (session('success'))
+            <div class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900" role="status">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <section class="card-padded">
             <h1 class="citizen-page-title">Citizen Dashboard</h1>
             <p class="citizen-page-subtitle">

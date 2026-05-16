@@ -1,3 +1,7 @@
+<a href="{{ route('auth.google.redirect') }}" class="google-login mb-3 d-inline-block">
+    <i class="fab fa-google-plus mr-1"></i> Continue with Google
+</a>
+
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0 pl-3">
