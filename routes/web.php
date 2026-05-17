@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\RegisterDocumentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
@@ -55,18 +56,15 @@ Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'
 
 // auth routes
 Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest')->name('login');
-Route::post('/register', [RegisterController::class, '__invoke'])->name('register');
+Route::post('/register', [RegisterController::class, '__invoke'])->middleware('guest')->name('register');
+Route::post('/register/document-scan', [RegisterDocumentController::class, 'scan'])->middleware('guest')->name('register.document.scan');
+Route::post('/register/document-scan/cancel', [RegisterDocumentController::class, 'cancel'])->middleware('guest')->name('register.document.cancel');
 Route::middleware(['check.auth'])->group(function () {
     Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');
 
     Route::get('/verify-otp', [OTPController::class, 'show'])->name('otp.show');
     Route::post('/otp/send', [OTPController::class, 'send'])->name('otp.send');
     Route::post('/otp/verify', [OTPController::class, 'verify'])->name('otp.verify');
-});
-
-Route::middleware(['check.auth'])->group(function () {
-    Route::get('/document-reader', [DocumentReaderController::class, 'create'])->name('document.reader.create');
-    Route::post('/document-reader', [DocumentReaderController::class, 'upload'])->name('document.reader.upload');
 });
 
 Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->name('admin.')->group(function () {

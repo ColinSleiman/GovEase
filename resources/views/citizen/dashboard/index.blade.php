@@ -18,7 +18,6 @@
             <div class="mt-4 flex flex-wrap gap-3">
                 <a href="{{ route('citizen.requests.create') }}" class="btn-base btn-variant-blue">Create Request</a>
                 <a href="{{ route('citizen.requests.index') }}" class="btn-base btn-variant-white">View My Requests</a>
-                <a href="{{ route('document.reader.create') }}" class="btn-base btn-variant-white">Scan Document with AI</a>
             </div>
         </section>
 

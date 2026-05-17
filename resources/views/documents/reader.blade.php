@@ -24,9 +24,6 @@
                 </p>
             </div>
 
-            <x-admin.actions.button :href="route('document.reader.create')" variant="blue">
-                Upload Document
-            </x-admin.actions.button>
         </section>
 
         <section class="admin-table-wrap">

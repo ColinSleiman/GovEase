@@ -57,4 +57,9 @@ return [
         'client_secret' => env('INSTAGRAM_CLIENT_SECRET'),
         'redirect' => env('INSTAGRAM_REDIRECT_URL'),
     ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+    ],
 ];
