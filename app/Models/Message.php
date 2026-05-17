@@ -13,6 +13,7 @@ class Message extends Model
         "message",
         "sender_id",
         "receiver_id",
+        "is_read",
     ];
 
     public function sender() { return $this->belongsTo(User::class, 'sender_id'); }
