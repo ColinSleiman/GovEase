@@ -17,6 +17,13 @@
         </section>
 
         <section class="admin-sidebar-group">
+            <h2 class="admin-sidebar-group-title">Document Management</h2>
+            <a href="{{ route('admin.document.reader') }}" class="admin-sidebar-link {{ request()->routeIs('admin.document.reader') ? 'active' : '' }}">
+                Document Reader
+            </a>
+        </section>
+
+        <section class="admin-sidebar-group">
             <h2 class="admin-sidebar-group-title">Municipalities Management</h2>
             <a href="{{ route('admin.municipalities.create') }}" class="admin-sidebar-link">
                 Create Municipality

@@ -12,11 +12,23 @@ class DocumentReaderController extends Controller
 {
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect()
+                ->route('portal.access')
+                ->with('error', 'Please log in before uploading a document.');
+        }
+
         return view('documents.upload');
     }
 
     public function upload(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()
+                ->route('portal.access')
+                ->with('error', 'Please log in before uploading a document.');
+        }
+
         $validator = Validator::make($request->all(), [
             'document' => 'required|file|mimes:pdf,jpg,jpeg,png,webp|max:15360',
         ], [
@@ -70,6 +82,7 @@ class DocumentReaderController extends Controller
         $analysis = $this->analyzeDocumentWithGemini($path, $mimeType);
 
         $this->saveAnalysis($fileName, $analysis);
+        $this->saveUploaderMetadata($fileName);
 
         return redirect()
             ->route('document.reader.create')
@@ -122,6 +135,7 @@ class DocumentReaderController extends Controller
                         'type' => $type,
                         'canPreview' => $canPreview,
                         'analysis' => $this->loadAnalysis($fileName),
+                        'uploader' => $this->loadUploaderMetadata($fileName),
                     ];
 
                     $documents[] = $document;
@@ -377,6 +391,49 @@ Rules:
         }
 
         return $analysis;
+    }
+
+    private function saveUploaderMetadata($fileName)
+    {
+        $folder = storage_path('app/document-reader-metadata');
+
+        if (!is_dir($folder)) {
+            mkdir($folder, 0777, true);
+        }
+
+        $user = Auth::user();
+
+        $metadata = [
+            'uploaded_at' => now()->format('Y-m-d H:i:s'),
+            'user_id' => $user->id,
+            'first_name' => $user->firstName,
+            'last_name' => $user->lastName,
+            'full_name' => $user->full_name,
+            'email' => $user->email,
+            'role' => $user->role ? $user->role->name : null,
+        ];
+
+        file_put_contents(
+            $folder . DIRECTORY_SEPARATOR . $fileName . '.json',
+            json_encode($metadata, JSON_PRETTY_PRINT)
+        );
+    }
+
+    private function loadUploaderMetadata($fileName)
+    {
+        $path = storage_path('app/document-reader-metadata/' . $fileName . '.json');
+
+        if (!file_exists($path)) {
+            return null;
+        }
+
+        $metadata = json_decode(file_get_contents($path), true);
+
+        if (!is_array($metadata)) {
+            return null;
+        }
+
+        return $metadata;
     }
 
     private function isAdministrator()

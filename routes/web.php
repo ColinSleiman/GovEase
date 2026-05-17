@@ -64,9 +64,10 @@ Route::middleware(['check.auth'])->group(function () {
     Route::post('/otp/verify', [OTPController::class, 'verify'])->name('otp.verify');
 });
 
-Route::get('/document-reader', [DocumentReaderController::class, 'create'])->name('document.reader.create');
-Route::post('/document-reader', [DocumentReaderController::class, 'upload'])->name('document.reader.upload');
-
+Route::middleware(['check.auth'])->group(function () {
+    Route::get('/document-reader', [DocumentReaderController::class, 'create'])->name('document.reader.create');
+    Route::post('/document-reader', [DocumentReaderController::class, 'upload'])->name('document.reader.upload');
+});
 
 Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
