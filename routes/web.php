@@ -39,7 +39,7 @@ use App\Http\Controllers\Public\DocumentRequestController;
 use App\Http\Controllers\Public\PaymentController;
 use App\Http\Controllers\Public\RequestController;
 use App\Http\Controllers\Public\DocumentReaderController;
-
+use App\Http\Controllers\Chat\ChatController;
 
 Route::get('/', function () { return view('layouts.app', ['title' => 'Home']); })->name('home');
 Route::get('/portal-access', function () { return view('auth.portal', ['title' => 'Portal Access']); })->middleware('guest')->name('portal.access');
@@ -159,6 +159,12 @@ Route::middleware(['check.auth', 'check.role:Citizen,OfficeStaff,Administrator']
     Route::resource('documents', DocumentController::class);
     Route::resource('document-requests', DocumentRequestController::class);
     Route::resource('payments', PaymentController::class);
+
+    // Chat API
+    Route::get('/chat/contacts', [ChatController::class, 'getContacts'])->name('chat.contacts');
+    Route::get('/chat/unread', [ChatController::class, 'getUnreadCount'])->name('chat.unread');
+    Route::get('/chat/messages/{contact}', [ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/messages/{contact}', [ChatController::class, 'sendMessage'])->name('chat.send');
 });
 
 Route::post("stripe", [StripeController::class, "store"])->name("stripe.payment");
