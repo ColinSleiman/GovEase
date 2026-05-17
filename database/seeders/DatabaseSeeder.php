@@ -6,6 +6,7 @@ use App\Models\Municipality;
 use App\Models\Office;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\Support\OfficeStaffAccount;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -71,22 +72,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $baabdaStaffEmail = OfficeStaffAccount::email('Baabda', $office->name);
+        $baabdaStaffNames = OfficeStaffAccount::names('Baabda', $office->name);
+
         User::updateOrCreate(
-            ['email' => 'officestaff@govease.com'],
-            [
-                'firstName' => 'Office',
-                'lastName' => 'Staff',
-                'office_id' => $office->id,
-                'role_id' => $officeStaffRole->id,
-                'password' => Hash::make('password'),
-                'is_active' => true,
-                'verified' => true,
-                'email_verified_at' => now(),
-                'two_factor_authentication' => false,
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
+            ['email' => $baabdaStaffEmail],
+            User::factory()->officeStaff($officeStaffRole->id, $office->id)->make([
+                'firstName' => $baabdaStaffNames['firstName'],
+                'lastName' => $baabdaStaffNames['lastName'],
+                'email' => $baabdaStaffEmail,
+            ])->getAttributes()
         );
 
         User::updateOrCreate(
@@ -106,5 +101,7 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]
         );
+
+        $this->call(LebanonDummyDataSeeder::class);
     }
 }
