@@ -27,7 +27,11 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        User::create($request->all());
+        $data = $request->all();
+        if (!empty($data['password'])) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+        }
+        User::create($data);
         return redirect()->route('admin.users.index');
     }
 
@@ -49,7 +53,15 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $row = User::findOrFail($id);
-        $row->update($request->all());
+        $data = $request->all();
+        
+        if (empty($data['password'])) {
+            unset($data['password']);
+        } else {
+            $data['password'] = Hash::make($data['password']);
+        }
+        
+        $row->update($data);
         return redirect()->route('admin.users.index');
     }
 
