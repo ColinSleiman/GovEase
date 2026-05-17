@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/templatemo-chain-app-dev.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/animated.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.css') }}">
-        
+
     </head>
 
     <body>
@@ -65,9 +65,23 @@
                                 @else
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <div class="gradient-button">
-                                            <a href="javascript:void(0)">
-                                                <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
-                                            </a>
+                                            @if (Auth::user()->role && Auth::user()->role->name == 'Administrator')
+                                                <a href="{{ route('admin.dashboard') }}">
+                                                    <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
+                                                </a>
+                                            @elseif (Auth::user()->role && Auth::user()->role->name == 'Citizen')
+                                                <a href="{{ route('citizen.dashboard') }}">
+                                                    <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
+                                                </a>
+                                            @elseif (Auth::user()->role && Auth::user()->role->name == 'OfficeStaff')
+                                                <a href="{{ route('office.dashboard') }}">
+                                                    <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
+                                                </a>
+                                            @else
+                                                <a href="{{ route('home') }}">
+                                                    <i class="fa fa-user"></i> {{ Auth::user()->full_name }}
+                                                </a>
+                                            @endif
                                         </div>
                                         <div class="gradient-button">
                                             <a href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('navbar-logout-form').submit();">
@@ -79,8 +93,8 @@
                                         </form>
                                     </div>
                                 @endguest
-                            </li> 
-                            </ul>        
+                            </li>
+                            </ul>
                             <a class='menu-trigger'>
                                 <span>Menu</span>
                             </a>
@@ -91,7 +105,7 @@
             </div>
         </header>
         <!-- ***** Header Area End ***** -->
-        
+
         <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
             <div class="container">
                 <div class="row">
@@ -212,7 +226,7 @@
                     </div>
                     <div class="col-lg-12">
                     <p>The result is a more responsive service model that improves operational efficiency while giving citizens a clearer, more convenient experience.</p>
-                    
+
                     <span></span>
                     </div>
                 </div>
@@ -348,7 +362,7 @@
                             </div>
                             </div>
                         </div>
-                        </div> 
+                        </div>
                         <div class="col-lg-5">
                         <ul class="nacc">
                             <li class="active">
@@ -457,7 +471,7 @@
                             </div>
                             </li>
                         </ul>
-                        </div>          
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -538,7 +552,7 @@
                 </div>
             </div>
             </div>
-        </div> 
+        </div>
 
         <footer id="newsletter">
             <div class="container">

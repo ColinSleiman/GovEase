@@ -13,7 +13,16 @@
 </head>
 <body class="portal-page">
 @php
-    $showRegister = old('firstName') || old('lastName') || $errors->has('firstName') || $errors->has('lastName') || $errors->has('password_confirmation');
+    $showRegister = old('firstName')
+        || old('lastName')
+        || $errors->has('firstName')
+        || $errors->has('lastName')
+        || $errors->has('password_confirmation')
+        || $errors->has('email')
+        || $errors->has('document')
+        || session('open_register_tab')
+        || session('register_document_scan')
+        || session('register_mode') === 'document';
 @endphp
 
 <div class="portal-shell">
@@ -82,6 +91,10 @@
         $('#registerTabBtn').on('click', function () {
             switchTab('register');
         });
+
+        @if (session('open_register_tab') || session('register_document_scan'))
+            switchTab('register');
+        @endif
     });
 </script>
 </body>

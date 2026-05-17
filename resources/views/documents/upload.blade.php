@@ -65,6 +65,14 @@
                     </div>
                 @endif
 
+                @auth
+                    <div class="alert alert-info portal-alert">
+                        This document will be linked to:
+                        <strong>{{ Auth::user()->full_name }}</strong>
+                        <span>({{ Auth::user()->email }})</span>
+                    </div>
+                @endauth
+
                 <div class="portal-panel">
                     <form action="{{ route('document.reader.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -79,7 +87,7 @@
                                 accept=".pdf,.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp,application/pdf"
                                 required>
                             <p class="mt-2 mb-0 text-muted small">
-                                The file will be uploaded, analyzed by AI, and saved for admin review.
+                                The file will be uploaded, linked to your account, analyzed by AI, and saved for admin review.
                             </p>
                         </div>
 

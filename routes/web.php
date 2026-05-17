@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\RegisterDocumentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\OTPController;
+use App\Http\Controllers\Auth\SocialAuthController;
 
 
 // Admin
@@ -44,11 +46,19 @@ Route::get('/portal-access', function () { return view('auth.portal', ['title' =
 
 Route::get('/api/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
+    ->where('provider', 'github|facebook|instagram')
+    ->name('social.redirect');
 
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
+    ->where('provider', 'github|facebook|instagram')
+    ->name('social.callback');
 
 // auth routes
 Route::post('/login', [LoginController::class, '__invoke'])->middleware('guest')->name('login');
-Route::post('/register', [RegisterController::class, '__invoke'])->name('register');
+Route::post('/register', [RegisterController::class, '__invoke'])->middleware('guest')->name('register');
+Route::post('/register/document-scan', [RegisterDocumentController::class, 'scan'])->middleware('guest')->name('register.document.scan');
+Route::post('/register/document-scan/cancel', [RegisterDocumentController::class, 'cancel'])->middleware('guest')->name('register.document.cancel');
 Route::middleware(['check.auth'])->group(function () {
     Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');
 
@@ -56,10 +66,6 @@ Route::middleware(['check.auth'])->group(function () {
     Route::post('/otp/send', [OTPController::class, 'send'])->name('otp.send');
     Route::post('/otp/verify', [OTPController::class, 'verify'])->name('otp.verify');
 });
-
-Route::get('/document-reader', [DocumentReaderController::class, 'create'])->name('document.reader.create');
-Route::post('/document-reader', [DocumentReaderController::class, 'upload'])->name('document.reader.upload');
-
 
 Route::middleware(['check.auth', 'check.role:Administrator'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');

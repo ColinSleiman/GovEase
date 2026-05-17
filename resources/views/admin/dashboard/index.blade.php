@@ -5,10 +5,18 @@
 @section('content')
     <div class="admin-page">
         <section class="card-padded">
-            <h1 class="admin-page-title">Admin Dashboard</h1>
-            <p class="admin-page-subtitle">
-                Oversee requests, services, municipalities, offices, users, and revenue from one place.
-            </p>
+            <div class="card-header">
+                <div>
+                    <h1 class="admin-page-title">Admin Dashboard</h1>
+                    <p class="admin-page-subtitle">
+                        Oversee requests, services, municipalities, offices, users, and revenue from one place.
+                    </p>
+                </div>
+
+                <x-admin.actions.button :href="route('admin.document.reader')" variant="blue">
+                    Document Reader
+                </x-admin.actions.button>
+            </div>
         </section>
 
         <section class="space-y-6">
@@ -44,32 +52,32 @@
                 <div class="admin-table-scroll">
                     <table class="admin-table">
                         <thead class="admin-table-head">
-                            <tr>
-                                <th class="admin-table-th">Tracking #</th>
-                                <th class="admin-table-th">Citizen</th>
-                                <th class="admin-table-th">Office</th>
-                                <th class="admin-table-th">Status</th>
-                                <th class="admin-table-th-right">Actions</th>
-                            </tr>
+                        <tr>
+                            <th class="admin-table-th">Tracking #</th>
+                            <th class="admin-table-th">Citizen</th>
+                            <th class="admin-table-th">Office</th>
+                            <th class="admin-table-th">Status</th>
+                            <th class="admin-table-th-right">Actions</th>
+                        </tr>
                         </thead>
                         <tbody class="admin-table-body">
-                            @forelse ($requests as $request)
-                                <tr class="admin-table-row">
-                                    <td class="admin-table-td">{{ $request->tracking_number }}</td>
-                                    <td class="admin-table-td">{{ $request->user?->full_name ?? '-' }}</td>
-                                    <td class="admin-table-td">{{ $request->service?->office?->name ?? '-' }}</td>
-                                    <td class="admin-table-td">{{ $request->status?->name ?? '-' }}</td>
-                                    <td class="admin-table-actions-cell">
-                                        <div class="admin-actions">
-                                            <x-admin.actions.button :href="route('admin.requests.show', $request->id)" variant="blue" class="btn-xs">Open</x-admin.actions.button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="admin-empty">No requests found yet.</td>
-                                </tr>
-                            @endforelse
+                        @forelse ($requests as $request)
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $request->tracking_number }}</td>
+                                <td class="admin-table-td">{{ $request->user?->full_name ?? '-' }}</td>
+                                <td class="admin-table-td">{{ $request->service?->office?->name ?? '-' }}</td>
+                                <td class="admin-table-td">{{ $request->status?->name ?? '-' }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.requests.show', $request->id)" variant="blue" class="btn-xs">Open</x-admin.actions.button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="admin-empty">No requests found yet.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -89,35 +97,35 @@
                 <div class="admin-table-scroll">
                     <table class="admin-table">
                         <thead class="admin-table-head">
-                            <tr>
-                                <th class="admin-table-th">ID</th>
-                                <th class="admin-table-th">Name</th>
-                                <th class="admin-table-th">Region</th>
-                                <th class="admin-table-th-right">Actions</th>
-                            </tr>
+                        <tr>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">Name</th>
+                            <th class="admin-table-th">Region</th>
+                            <th class="admin-table-th-right">Actions</th>
+                        </tr>
                         </thead>
                         <tbody class="admin-table-body">
-                            @forelse ($municipalities as $municipality)
-                                <tr class="admin-table-row">
-                                    <td class="admin-table-td">{{ $municipality->id }}</td>
-                                    <td class="admin-table-td">{{ $municipality->name }}</td>
-                                    <td class="admin-table-td">{{ $municipality->region }}</td>
-                                    <td class="admin-table-actions-cell">
-                                        <div class="admin-actions">
-                                            <x-admin.actions.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
-                                            <form action="{{ route('admin.municipalities.destroy', $municipality->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="admin-empty">No municipalities found.</td>
-                                </tr>
-                            @endforelse
+                        @forelse ($municipalities as $municipality)
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $municipality->id }}</td>
+                                <td class="admin-table-td">{{ $municipality->name }}</td>
+                                <td class="admin-table-td">{{ $municipality->region }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.municipalities.edit', $municipality->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
+                                        <form action="{{ route('admin.municipalities.destroy', $municipality->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="admin-empty">No municipalities found.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -137,37 +145,37 @@
                 <div class="admin-table-scroll">
                     <table class="admin-table">
                         <thead class="admin-table-head">
-                            <tr>
-                                <th class="admin-table-th">ID</th>
-                                <th class="admin-table-th">Name</th>
-                                <th class="admin-table-th">Municipality ID</th>
-                                <th class="admin-table-th">Services</th>
-                                <th class="admin-table-th-right">Actions</th>
-                            </tr>
+                        <tr>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">Name</th>
+                            <th class="admin-table-th">Municipality ID</th>
+                            <th class="admin-table-th">Services</th>
+                            <th class="admin-table-th-right">Actions</th>
+                        </tr>
                         </thead>
                         <tbody class="admin-table-body">
-                            @forelse ($offices as $office)
-                                <tr class="admin-table-row">
-                                    <td class="admin-table-td">{{ $office->id }}</td>
-                                    <td class="admin-table-td">{{ $office->name }}</td>
-                                    <td class="admin-table-td">{{ $office->municipality_id }}</td>
-                                    <td class="admin-table-td">{{ $office->services_count }}</td>
-                                    <td class="admin-table-actions-cell">
-                                        <div class="admin-actions">
-                                            <x-admin.actions.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
-                                            <form action="{{ route('admin.offices.destroy', $office->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="admin-empty">No offices found.</td>
-                                </tr>
-                            @endforelse
+                        @forelse ($offices as $office)
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $office->id }}</td>
+                                <td class="admin-table-td">{{ $office->name }}</td>
+                                <td class="admin-table-td">{{ $office->municipality_id }}</td>
+                                <td class="admin-table-td">{{ $office->services_count }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.offices.edit', $office->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
+                                        <form action="{{ route('admin.offices.destroy', $office->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="admin-empty">No offices found.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -187,35 +195,35 @@
                 <div class="admin-table-scroll">
                     <table class="admin-table">
                         <thead class="admin-table-head">
-                            <tr>
-                                <th class="admin-table-th">ID</th>
-                                <th class="admin-table-th">Name</th>
-                                <th class="admin-table-th">Email</th>
-                                <th class="admin-table-th-right">Actions</th>
-                            </tr>
+                        <tr>
+                            <th class="admin-table-th">ID</th>
+                            <th class="admin-table-th">Name</th>
+                            <th class="admin-table-th">Email</th>
+                            <th class="admin-table-th-right">Actions</th>
+                        </tr>
                         </thead>
                         <tbody class="admin-table-body">
-                            @forelse ($users as $user)
-                                <tr class="admin-table-row">
-                                    <td class="admin-table-td">{{ $user->id }}</td>
-                                    <td class="admin-table-td">{{ $user->full_name }}</td>
-                                    <td class="admin-table-td">{{ $user->email }}</td>
-                                    <td class="admin-table-actions-cell">
-                                        <div class="admin-actions">
-                                            <x-admin.actions.button :href="route('admin.users.edit', $user->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
-                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="admin-empty">No users found.</td>
-                                </tr>
-                            @endforelse
+                        @forelse ($users as $user)
+                            <tr class="admin-table-row">
+                                <td class="admin-table-td">{{ $user->id }}</td>
+                                <td class="admin-table-td">{{ $user->full_name }}</td>
+                                <td class="admin-table-td">{{ $user->email }}</td>
+                                <td class="admin-table-actions-cell">
+                                    <div class="admin-actions">
+                                        <x-admin.actions.button :href="route('admin.users.edit', $user->id)" variant="blue" class="btn-xs">Edit</x-admin.actions.button>
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-admin.actions.button variant="red" type="submit" class="btn-xs">Delete</x-admin.actions.button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="admin-empty">No users found.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>

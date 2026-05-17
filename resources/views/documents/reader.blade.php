@@ -24,9 +24,6 @@
                 </p>
             </div>
 
-            <x-admin.actions.button :href="route('document.reader.create')" variant="blue">
-                Upload Document
-            </x-admin.actions.button>
         </section>
 
         <section class="admin-table-wrap">
@@ -35,6 +32,9 @@
                     <thead class="admin-table-head">
                     <tr>
                         <th class="admin-table-th">File Name</th>
+                        <th class="admin-table-th">Uploaded By</th>
+                        <th class="admin-table-th">Email</th>
+                        <th class="admin-table-th">Upload Date</th>
                         <th class="admin-table-th">File Type</th>
                         <th class="admin-table-th">Size</th>
                         <th class="admin-table-th">AI Type</th>
@@ -47,6 +47,7 @@
                     @forelse ($documents as $document)
                         @php
                             $analysis = $document['analysis'] ?? null;
+                            $uploader = $document['uploader'] ?? null;
                             $documentType = $analysis['document_type'] ?? 'Not analyzed';
                             $confidence = $analysis['confidence'] ?? 0;
                             $badgeKey = strtolower((string) $documentType);
@@ -56,6 +57,26 @@
                         <tr class="admin-table-row">
                             <td class="admin-table-td">
                                 <div class="font-medium text-slate-900">{{ $document['name'] }}</div>
+                            </td>
+
+                            <td class="admin-table-td">
+                                <div class="font-medium text-slate-900">
+                                    {{ $uploader['full_name'] ?? 'Not recorded' }}
+                                </div>
+
+                                @if (!empty($uploader['role']))
+                                    <div class="text-xs text-slate-500">
+                                        {{ $uploader['role'] }}
+                                    </div>
+                                @endif
+                            </td>
+
+                            <td class="admin-table-td">
+                                {{ $uploader['email'] ?? '-' }}
+                            </td>
+
+                            <td class="admin-table-td">
+                                {{ $uploader['uploaded_at'] ?? '-' }}
                             </td>
 
                             <td class="admin-table-td">
@@ -98,7 +119,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="admin-empty">
+                            <td colspan="9" class="admin-empty">
                                 No documents uploaded yet.
                             </td>
                         </tr>
@@ -123,6 +144,7 @@
                     $analysis = $previewDocument['analysis'] ?? null;
                     $fields = $analysis['fields'] ?? [];
                     $notes = $analysis['notes'] ?? [];
+                    $uploader = $previewDocument['uploader'] ?? null;
 
                     if (!is_array($notes)) {
                         $notes = [$notes];
@@ -157,88 +179,136 @@
                         @endif
                     </div>
 
-                    <div class="rounded-xl border border-slate-200 bg-white p-4">
-                        <h3 class="text-base font-semibold text-slate-900">
-                            AI Extracted Information
-                        </h3>
+                    <div class="space-y-5">
+                        <div class="rounded-xl border border-slate-200 bg-white p-4">
+                            <h3 class="text-base font-semibold text-slate-900">
+                                Uploaded By
+                            </h3>
 
-                        @if (!empty($analysis))
-                            <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</p>
-                                    <p class="mt-1 text-sm font-semibold text-slate-900">
-                                        {{ $analysis['status'] ?? 'unknown' }}
-                                    </p>
+                            @if (!empty($uploader))
+                                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Name</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $uploader['full_name'] ?? 'Not recorded' }}
+                                        </p>
+                                    </div>
+
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $uploader['email'] ?? '-' }}
+                                        </p>
+                                    </div>
+
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Role</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $uploader['role'] ?? '-' }}
+                                        </p>
+                                    </div>
+
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Uploaded At</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $uploader['uploaded_at'] ?? '-' }}
+                                        </p>
+                                    </div>
                                 </div>
-
-                                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Document Type</p>
-                                    <p class="mt-1 text-sm font-semibold text-slate-900">
-                                        {{ str_replace('_', ' ', $analysis['document_type'] ?? 'unknown') }}
-                                    </p>
-                                </div>
-
-                                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Confidence</p>
-                                    <p class="mt-1 text-sm font-semibold text-slate-900">
-                                        {{ $analysis['confidence'] ?? 0 }}%
-                                    </p>
-                                </div>
-                            </div>
-
-                            @if (!empty($analysis['message']))
-                                <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                                    {{ $analysis['message'] }}
+                            @else
+                                <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                                    No uploader information found for this document. Upload the file again to link it to a user.
                                 </div>
                             @endif
+                        </div>
 
-                            <div class="mt-5 overflow-hidden rounded-xl border border-slate-200">
-                                <table class="admin-table">
-                                    <thead class="admin-table-head">
-                                    <tr>
-                                        <th class="admin-table-th">Field</th>
-                                        <th class="admin-table-th">Value</th>
-                                    </tr>
-                                    </thead>
+                        <div class="rounded-xl border border-slate-200 bg-white p-4">
+                            <h3 class="text-base font-semibold text-slate-900">
+                                AI Extracted Information
+                            </h3>
 
-                                    <tbody class="admin-table-body">
-                                    @forelse ($fields as $key => $value)
-                                        <tr class="admin-table-row">
-                                            <td class="admin-table-td font-medium text-slate-900">
-                                                {{ ucwords(str_replace('_', ' ', $key)) }}
-                                            </td>
-                                            <td class="admin-table-td">
-                                                {{ $value ?? 'Not found' }}
-                                            </td>
-                                        </tr>
-                                    @empty
+                            @if (!empty($analysis))
+                                <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $analysis['status'] ?? 'unknown' }}
+                                        </p>
+                                    </div>
+
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Document Type</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ str_replace('_', ' ', $analysis['document_type'] ?? 'unknown') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Confidence</p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-900">
+                                            {{ $analysis['confidence'] ?? 0 }}%
+                                        </p>
+                                    </div>
+                                </div>
+
+                                @if (!empty($analysis['message']))
+                                    <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                        {{ $analysis['message'] }}
+                                    </div>
+                                @endif
+
+                                <div class="mt-5 overflow-hidden rounded-xl border border-slate-200">
+                                    <table class="admin-table">
+                                        <thead class="admin-table-head">
                                         <tr>
-                                            <td colspan="2" class="admin-empty">
-                                                No fields detected.
-                                            </td>
+                                            <th class="admin-table-th">Field</th>
+                                            <th class="admin-table-th">Value</th>
                                         </tr>
-                                    @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
 
-                            @if (!empty($notes))
-                                <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                                    <h4 class="text-sm font-semibold text-slate-900">Notes</h4>
-                                    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
-                                        @foreach ($notes as $note)
-                                            @if (!empty($note))
-                                                <li>{{ $note }}</li>
-                                            @endif
-                                        @endforeach
-                                    </ul>
+                                        <tbody class="admin-table-body">
+                                        @forelse ($fields as $key => $value)
+                                            <tr class="admin-table-row">
+                                                <td class="admin-table-td font-medium text-slate-900">
+                                                    {{ ucwords(str_replace('_', ' ', $key)) }}
+                                                </td>
+                                                <td class="admin-table-td">
+                                                    @if (is_array($value))
+                                                        {{ json_encode($value) }}
+                                                    @else
+                                                        {{ $value ?? 'Not found' }}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="2" class="admin-empty">
+                                                    No fields detected.
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                @if (!empty($notes))
+                                    <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                                        <h4 class="text-sm font-semibold text-slate-900">Notes</h4>
+                                        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                                            @foreach ($notes as $note)
+                                                @if (!empty($note))
+                                                    <li>{{ $note }}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            @else
+                                <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                                    No AI analysis found for this document. Upload the file again to generate analysis.
                                 </div>
                             @endif
-                        @else
-                            <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-                                No AI analysis found for this document. Upload the file again to generate analysis.
-                            </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
             @else
